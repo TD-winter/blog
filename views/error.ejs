@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>EJS Examples</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+</head>
+<body>
+
+	<button id="click">click</button>
+</body>
+<script src="/javascripts/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+/*	var domClick = document.getElementById('click');
+	domClick.addEventListener('click',function(){
+		var xhr = new XMLHttpRequest();
+		xhr.responseType = "json";
+		xhr.open('get','http://localhost:3000/dong',true);
+		xhr.onload = function(e){
+			console.log(xhr.response);
+		}
+	})
+	*/
+	$.get('http://localhost:3000/dong',function(res){
+		console.log(res);
+	})
+</script>
+</html>

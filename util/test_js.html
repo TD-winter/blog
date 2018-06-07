@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<input type="file" onchange="previewFile()"><br>
+	<img src="" height="200" alt="Image preview...">
+	<p onclick="readText">点击</p>
+</body>
+<script>
+	function previewFile() {
+	  var preview = document.querySelector('img');
+	  var file    = document.querySelector('input[type=file]').files[0];
+	  var reader  = new FileReader();
+
+	  reader.addEventListener("load", function () {
+		preview.src = reader.result;
+		console.log(reader.result);
+	  }, false);
+
+	  if (file) {
+		reader.readAsDataURL(file);
+	  }
+	}
+</script>
+</html>
