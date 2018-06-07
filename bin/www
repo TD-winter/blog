@@ -8,9 +8,10 @@ var app = require('../app');
 var debug = require('debug')('dong:server');
 var http = require('http');
 var https = require('https');
+var fs = require('fs');
 
-var privateKey  = fs.readFileSync('../keys/1529819111363.key', 'utf8');
-var certificate = fs.readFileSync('../keys/1529819111363.crt','utf8');
+var privateKey  = fs.readFileSync('./key/1529819111363.key', 'utf8');
+var certificate = fs.readFileSync('./key/1529819111363.crt','utf8');
 var credentials = {key:privateKey,cert:certificate};
 /**
  * Get port from environment and store in Express.
