@@ -7,20 +7,24 @@
 var app = require('../app');
 var debug = require('debug')('dong:server');
 var http = require('http');
+var https = require('https');
 
+var privateKey  = fs.readFileSync('../keys/1529819111363.key', 'utf8');
+var certificate = fs.readFileSync('../keys/1529819111363.crt','utf8');
+var credentials = {key:privateKey,cert:certificate};
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '80');
 app.set('port', port);
-
+var SSLPORT = 443;
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
-
+var httpsServer = https.createServer(credentials,app);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -29,6 +33,7 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+httpsServer.listen(SSLPORT);
 /**
  * Normalize a port into a number, string, or false.
  */
