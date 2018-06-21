@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>EJS Examples</title>
+<title>村农</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
 </head>
@@ -54,7 +54,7 @@
 			success:function(res){
 				res = JSON.parse(res);
 				console.log(res);
-				$('#beauty').text("你的颜值："+res.result.face_list[0].beauty)
+				$('#beauty').text("你的颜值："+res.data.face_list[0].beauty)
 			}
 		})
 	})

@@ -2,11 +2,40 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 var fs = require('fs');
-var mysql = require('mysql');
+// var mysql = require('mysql');
+// var dbConfig = require('../db/dbConfig.js');
+// var pool = mysql.createPool(dbConfig.mysql);
+var mongoose = require('mongoose');
+// var faceInfo = require('../util/face.js');
+var faceInfo = require('../util/qq_face.js');
 
-var faceInfo = require('../util/face.js');
-var dbConfig = require('../db/dbConfig.js');
-var pool = mysql.createPool(dbConfig.mysql);
+mongoose.connect('mongodb://localhost:27017/dong');
+
+const con = mongoose.connection;
+var TestSchema = new mongoose.Schema({
+	name:{type:String},
+	age:{type:Number,default:0},
+	email:{type:String},
+	time:{type:Date,default:Date.now}
+});
+var TestModel = con.model("test1",TestSchema);
+var TestEntity = new TestModel({
+	name:'TD-winter',
+	age:27,
+	emai:'747386743@qq.com'
+});
+
+var articleSchema = new mongoose.Schema({
+	
+})
+
+TestEntity.save(function(error,doc){
+	if(error){
+		console.log(error);
+	}else{
+		console.log(doc);
+	}
+})
 
 var createFolder = function(folder){
 	try{
@@ -33,22 +62,25 @@ var upload = multer({storage: storage});
 router.get('/',function(req,res,next){
 	res.render('index',{title:'dongdong'});
 });
-router.get('/dong',function(req,res,next){
-	pool.getConnection(function(err,connection){
-		connection.query("select foot,hostid,color,count(*) as number from pigeon group by foot",function(err,result){
-			res.json(result);
-		});
-		connection.release();
-	});
+router.get('/edit',function(req,res,next){
+	res.render('edit',{title:'编辑文章'});
 });
-router.get('/why',function(req,res,next){
-	pool.getConnection(function(err,connection){
-		connection.query('select sky=? from race where id = ?',['晴',37],function(err,result){
-			console.log(result);
-			res.json(result);
-		})
-	});
-});
+// router.get('/dong',function(req,res,next){
+// 	pool.getConnection(function(err,connection){
+// 		connection.query("select foot,hostid,color,count(*) as number from pigeon group by foot",function(err,result){
+// 			res.json(result);
+// 		});
+// 		connection.release();
+// 	});
+// });
+// router.get('/why',function(req,res,next){
+// 	pool.getConnection(function(err,connection){
+// 		connection.query('select sky=? from race where id = ?',['晴',37],function(err,result){
+// 			console.log(result);
+// 			res.json(result);
+// 		})
+// 	});
+// });
 router.post('/face/info',upload.single('pic'),function(req,res,next){
     var file = req.file;
 	faceInfo(res,file.path);
