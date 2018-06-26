@@ -19,23 +19,28 @@ var TestSchema = new mongoose.Schema({
 	time:{type:Date,default:Date.now}
 });
 var TestModel = con.model("test1",TestSchema);
-var TestEntity = new TestModel({
-	name:'TD-winter',
-	age:27,
-	emai:'747386743@qq.com'
-});
+// var TestEntity = new TestModel({
+// 	name:'TD-winter',
+// 	age:27,
+// 	emai:'747386743@qq.com'
+// });
 
 var articleSchema = new mongoose.Schema({
-	
+	title:{type:String},
+	writer:{type:String},
+	brief:{type:String},
+	article:{type:String},
+	time:{type:Date,default:Date.now}
 })
+var articleModel = con.model("article",articleSchema);
 
-TestEntity.save(function(error,doc){
-	if(error){
-		console.log(error);
-	}else{
-		console.log(doc);
-	}
-})
+// TestEntity.save(function(error,doc){
+// 	if(error){
+// 		console.log(error);
+// 	}else{
+// 		console.log(doc);
+// 	}
+// })
 
 var createFolder = function(folder){
 	try{
@@ -60,11 +65,31 @@ var upload = multer({storage: storage});
 /* GET home page. */
 
 router.get('/',function(req,res,next){
-	res.render('index',{title:'dongdong'});
+	articleModel.find({},function(err,doc){
+		res.render('index',{title:'dongdong',doc:doc});
+	})
+	
 });
 router.get('/edit',function(req,res,next){
 	res.render('edit',{title:'编辑文章'});
 });
+router.post('/addArticle',function(req,res,next){
+	var articleEntity = new articleModel(req.body);
+	articleEntity.save(function(err,doc){
+		if(err){
+			console.log(err)
+		}else{
+			res.send({code:200,msg:'Added successfully'});
+		}
+	})
+})
+router.get('/page',function(req,res,next){
+	articleModel.find({"_id":req.query.id},function(err,doc){
+		console.log(doc);
+		res.render('page',{doc:doc});
+	})
+})
+
 // router.get('/dong',function(req,res,next){
 // 	pool.getConnection(function(err,connection){
 // 		connection.query("select foot,hostid,color,count(*) as number from pigeon group by foot",function(err,result){

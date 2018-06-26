@@ -8,16 +8,21 @@
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"> </script>
     <style type="text/css">
-        div{
-            width:100%;
-        }
+        div{width:90%;margin:auto;max-width:1000px;}
+        input{width:200px;height:20px;margin:10px;}
+        textarea{width:500px;height:200px;margin:10px;}
+        label{margin:10px 10px 10px 0;display:inline-block;vertical-align:top;}
+        button{padding:5px 20px;margin:10px 10px 10px 58px;display:inline-block;vertical-align:top;}
     </style>
 </head>
 <body>
 <div>
-    <h1><%= title %></h1>
-    <script id="editor" type="text/plain" style="width:1024px;height:600px;"></script>
-    <button id="getContent" onclick="getContent()">getContent</button>
+    <h3><%= title %></h3>
+    <label>标题：</label><input id="title" /><br />
+    <label>作者：</label><input id="writer" /><br />
+    <label>概要：</label><textarea id="brief" placeholder="简要概述"></textarea>
+    <script id="editor" type="text/plain" style="width:880px;height:600px;"></script>
+    <button id="getContent" onclick="getContent()">提交</button>
 </div>
 <script type="text/javascript" charset="utf-8" src="/javascripts/jquery-1.12.0.min.js"> </script>
 <script type="text/javascript">
@@ -31,6 +36,17 @@
         ue.ready(function() {
             var html = ue.getContent();
             console.log(html);
+            var title = $('#title').val();
+            var writer = $('#writer').val();
+            var brief = $('#brief').val();
+            $.post('/addArticle',{
+                title:title,
+                writer:writer,
+                article:html,
+                brief:brief
+            },function(res){
+                console.log(res)
+            })
         });
     }
 

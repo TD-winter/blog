@@ -6,41 +6,32 @@
 <title>村农</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
+<style>
+	a{text-decoration:none;color:#333;}
+	li{list-style:none;width:50%;padding:10px;margin:0 0 20px;box-shadow:0 0 10px #666;}
+	li h3{margin:0 auto 10px;}
+	li p{margin:5px auto;}
+</style>
 </head>
 <body>
-	<%= title %>
-	<button id="click">click</button>
-	<button id="why">click</button>
-<!-- 	<form action="/face/info" method="post" enctype="multipart/form-data">
-		<input name="pic" type="file" />
-		<button type="submit">上传文件</button>
-	</form> -->
-	<input name="pic" type="file" id="imgFile" />
-	<h1 id="beauty">你的颜值：</h1>
+	<ul>
+		<% for(var i in doc){ %>
+			<li>
+				<a href="page?id=<%= doc[i]._id %>">
+					<h3><%= doc[i].title %></h3>
+					<p><%= doc[i].writer %></p>
+					<%= doc[i].brief %>
+				</a>
+			</li>
+		<% } %>
+	</ul>
+	<div>
+		<h4 id="beauty">你的颜值：</h4>
+		<input name="pic" type="file" id="imgFile" />
+	</div>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
 <script type="text/javascript">
-/*	var domClick = document.getElementById('click');
-	domClick.addEventListener('click',function(){
-		var xhr = new XMLHttpRequest();
-		xhr.responseType = "json";
-		xhr.open('get','http://localhost:3000/dong',true);
-		xhr.onload = function(e){
-			console.log(xhr.response);
-		}
-	})
-	*/
-	$('#click').click(function(){
-		$.get('/dong',function(res){
-			console.log(res);
-		})
-	});
-	$('#why').click(function(){
-		$.get('/why',function(res){
-			console.log(res);
-		});
-	});
-
 	$('#imgFile').on('change',function(){
 		var formData = new FormData();
 		var file = $(this)[0].files[0];
