@@ -8,9 +8,14 @@
 <meta name="keywords" content="">
 <style>
 	a{text-decoration:none;color:#333;}
-	li{list-style:none;width:50%;padding:10px;margin:0 0 20px;box-shadow:0 0 10px #666;}
+	ul{width:60%;display:inline-block;}
+	li{list-style:none;width:90%;padding:10px;margin:0 0 20px;box-shadow:0 0 10px #666;}
 	li h3{margin:0 auto 10px;}
 	li p{margin:5px auto;}
+	.chat_box{width:25%;display:inline-block;vertical-align:top;}
+	.message_box{width:100%;height:500px;box-shadow:0 0 5px #ccc;overflow:scroll;}
+	.message_send{width:80%;height:30px;}
+	.message_submit{width:15%;height:36px;}
 </style>
 </head>
 <body>
@@ -25,12 +30,18 @@
 			</li>
 		<% } %>
 	</ul>
+	<div class="chat_box">
+		<div class="message_box"></div>
+		<input class="message_send" />
+		<button class="message_submit">发送</button>
+	</div>
 	<div>
 		<h4 id="beauty">你的颜值：</h4>
 		<input name="pic" type="file" id="imgFile" />
 	</div>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
+<script src="/javascripts/socket.io.js"></script>
 <script type="text/javascript">
 	$('#imgFile').on('change',function(){
 		var formData = new FormData();
@@ -48,6 +59,22 @@
 				$('#beauty').text("你的颜值："+res.data.face_list[0].beauty)
 			}
 		})
+	})
+	 //var socket = io.connect('http://localhost:3000');
+	var socket = io();
+	socket.on('getMsg',function(data){
+		console.log(data);
+		var msg_dom = $("<p>"+data.msg+"</p>")
+		$('.message_box').append(msg_dom);
+	})
+	$('.message_submit').click(function(){
+		socket.emit('sendData',{msg:$('.message_send').val()});
+		$('.message_send').val('');
+	});
+	$(document).keyup(function(event){
+		if(event.keyCode == 13){
+			$('.message_submit').trigger("click");
+		}
 	})
 </script>
 </html>

@@ -9,6 +9,7 @@ var debug = require('debug')('dong:server');
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
+var io = require('socket.io');
 
 var privateKey  = fs.readFileSync('./key/1529819111363.key', 'utf8');
 var certificate = fs.readFileSync('./key/1529819111363.crt','utf8');
@@ -25,6 +26,7 @@ var SSLPORT = 443;
  */
 
 var server = http.createServer(app);
+var ioServer = io(server);
 var httpsServer = https.createServer(credentials,app);
 /**
  * Listen on provided port, on all network interfaces.
@@ -33,8 +35,16 @@ var httpsServer = https.createServer(credentials,app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
 httpsServer.listen(SSLPORT);
+
+ioServer.on('connection',function(socket){
+  socket.on('sendData',function(data){
+    console.log(data);
+    ioServer.emit('getMsg',data);
+  })
+})
+
+
 /**
  * Normalize a port into a number, string, or false.
  */

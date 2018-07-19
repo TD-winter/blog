@@ -65,7 +65,7 @@ var upload = multer({storage: storage});
 /* GET home page. */
 
 router.get('/',function(req,res,next){
-	articleModel.find({},function(err,doc){
+	articleModel.find({},{title:1,writer:1,brief:1},function(err,doc){
 		res.render('index',{title:'dongdong',doc:doc});
 	})
 	
