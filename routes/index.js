@@ -68,11 +68,29 @@ router.get('/',function(req,res,next){
 	articleModel.find({},{title:1,writer:1,brief:1},function(err,doc){
 		res.render('index',{title:'dongdong',doc:doc});
 	})
-	
 });
-router.get('/edit',function(req,res,next){
-	res.render('edit',{title:'编辑文章'});
+
+router.get('/admin/edit',function(req,res,next){
+	res.render('admin/edit',{title:'编辑文章'});
 });
+router.get('/admin/list',function(req,res,next){
+	articleModel.find({},{title:1,writer:1},function(err,doc){
+		res.render('admin/list',{title:'pageList',doc:doc});
+	})
+});
+router.get('/admin/delete',function(req,res,next){
+	console.log(req.query.id);
+	articleModel.remove({"_id":req.query.id},function(err){
+		if(err){
+			console.log(err);
+		}else{
+			console.log('delete is successed!!!');
+			res.send({code:200,msg:'delete successfully'});
+		}
+	})
+})
+
+
 router.post('/addArticle',function(req,res,next){
 	var articleEntity = new articleModel(req.body);
 	articleEntity.save(function(err,doc){
