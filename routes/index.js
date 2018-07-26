@@ -65,7 +65,7 @@ var upload = multer({storage: storage});
 /* GET home page. */
 
 router.get('/',function(req,res,next){
-	articleModel.find({},{title:1,writer:1,brief:1},function(err,doc){
+	articleModel.find({},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
 		res.render('index',{title:'dongdong',doc:doc});
 	})
 });
@@ -74,7 +74,7 @@ router.get('/admin/edit',function(req,res,next){
 	res.render('admin/edit',{title:'编辑文章'});
 });
 router.get('/admin/list',function(req,res,next){
-	articleModel.find({},{title:1,writer:1},function(err,doc){
+	articleModel.find({},{title:1,writer:1},{sort:{'time':-1}},function(err,doc){
 		res.render('admin/list',{title:'pageList',doc:doc});
 	})
 });
