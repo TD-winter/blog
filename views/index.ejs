@@ -7,13 +7,14 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <style>
+	body{background:#F8F8F8;}
 	a{text-decoration:none;color:#333;}
 	ul{width:60%;display:inline-block;}
-	li{list-style:none;width:90%;padding:10px;margin:0 0 20px;box-shadow:0 0 10px #666;}
+	li{list-style:none;width:90%;padding:10px;margin:0 0 20px;box-shadow:0 0 10px #666;background:#FFF;border-radius:4px;}
 	li h3{margin:0 auto 10px;}
 	li p{margin:5px auto;}
-	.chat_box{width:25%;display:inline-block;vertical-align:top;}
-	.message_box{width:100%;height:500px;box-shadow:0 0 5px #ccc;overflow:scroll;}
+	.chat_box{width:25%;margin-top:12px;display:inline-block;vertical-align:top;background:#FFF;border-radius:4px;}
+	.message_box{width:100%;height:500px;box-shadow:0 0 5px #ccc;overflow-y:scroll;}
 	.message_send{width:80%;height:30px;}
 	.message_submit{width:15%;height:36px;}
 </style>
@@ -34,10 +35,10 @@
 		<div class="message_box"></div>
 		<input class="message_send" />
 		<button class="message_submit">发送</button>
-	</div>
-	<div>
-		<h4 id="beauty">你的颜值：</h4>
-		<input name="pic" type="file" id="imgFile" />
+		<div style="padding:10px;">
+			<h4 id="beauty">你的颜值：</h4>
+			<input name="pic" type="file" id="imgFile" />
+		</div>
 	</div>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
