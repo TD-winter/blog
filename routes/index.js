@@ -65,7 +65,11 @@ var upload = multer({storage: storage});
 /* GET home page. */
 
 router.get('/',function(req,res,next){
-	articleModel.find({},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
+	articleModel.find({},{title:1,writer:1,brief:1,time:1},{sort:{'time':-1}},function(err,doc){
+		for(var i = 0;i < doc.length;i++){
+			doc[i].time_string = doc[i].time.getFullYear()+'-'+doc[i].time.getMonth()+'-'+doc[i].time.getDate();
+		}
+
 		res.render('index',{title:'dongdong',doc:doc});
 	})
 });

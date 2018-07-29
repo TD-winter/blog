@@ -6,19 +6,16 @@
 <title>村农</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-<style>
-	body{text-align:center;}
-	.page{width:100%;max-width:1000px;margin:auto;padding:10px;text-align:left;box-shadow:0 0 5px #666;}
-	.page h3{margin:10px auto;}
-	.page h6{margin:0;}
-}
-</style>
+<link type="text/css" rel="styleSheet" href="/stylesheets/style.css">
 </head>
 <body>
-	<div class="page">
-		<h3><%= doc[0].title %></h3>
-		<h6><%= doc[0].writer %></h6>
-		<%- doc[0].article %>
+	<div class="content_box">
+		<%- include("./header.ejs") %>
+		<div class="page">
+			<h3><%= doc[0].title %></h3>
+			<h5><%= doc[0].writer %></h5>
+			<%- doc[0].article %>
+		</div>
 	</div>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
