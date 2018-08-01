@@ -5,6 +5,8 @@ li{list-style: none;}
 header{text-align:left;}
 header h3{display:inline-block;}
 header p{margin-left:20px;display:inline-block;}
+.header_a{display:inline-block;text-decoration:none;}
+.header_a:hover{color:#333;display:inline-block;text-decoration:none;}
 .header_ul{float:right;margin-bottom:0;margin-top:20px;}
 .header_ul li{margin:auto 10px;display:inline-block;vertical-align: middle;}
 .header_ul li a{padding:2px 5px;border:1px solid #fff;border-radius:4px;}
@@ -25,3 +27,47 @@ header p{margin-left:20px;display:inline-block;}
 .page{width:100%;max-width:1000px;margin:auto;padding:10px;text-align:left;}
 .page h3{margin:10px auto;}
 .page h6{margin:0;}
+
+/*oneBrief言语页面*/
+.word{width:75%;height:300px;margin:200px auto;}
+.word h1{text-align:left;}
+.word p{font-size:20px;text-align:right;}
+
+/*oneBrief言语编辑页面*/
+.one_brief_edit label{display:inline-block;vertical-align:top;}
+.one_brief_edit textarea{
+	width:486px;
+	height:300px;
+	padding:6px;
+	margin-bottom:30px;
+	border:1px solid #ccc;
+	border-radius:4px;
+	font-family:'kaiTi';
+	font-size:16px;
+}
+.one_brief_edit input{
+	width:494px;
+	height:20px;
+	padding-left:6px;
+	margin-bottom:30px;
+	border:1px solid #ccc;
+	border-radius:4px;
+	font-family:'kaiTi';
+	font-size:16px;
+}
+.one_brief_edit button{
+	width:70px;
+	height:28px;
+	border:1px solid #ccc;
+	background:#FFF;
+	color:#333;
+	border-radius:4px;
+	outline:none;
+	cursor:pointer;
+	letter-spacing:5px;
+}
+.one_brief_edit button:active{
+	/*background:#f1f1f1;*/
+	color: #0d73b0;
+	border:1px solid #0d73b0;
+}
