@@ -1,5 +1,6 @@
 var express = require('express');
 var multer = require('multer');
+var moment = require('moment');
 var router = express.Router();
 var fs = require('fs');
 // var mysql = require('mysql');
@@ -12,18 +13,6 @@ var faceInfo = require('../util/qq_face.js');
 mongoose.connect('mongodb://localhost:27017/dong');
 
 const con = mongoose.connection;
-var TestSchema = new mongoose.Schema({
-	name:{type:String},
-	age:{type:Number,default:0},
-	email:{type:String},
-	time:{type:Date,default:Date.now}
-});
-var TestModel = con.model("test1",TestSchema);
-// var TestEntity = new TestModel({
-// 	name:'TD-winter',
-// 	age:27,
-// 	emai:'747386743@qq.com'
-// });
 
 var articleSchema = new mongoose.Schema({
 	title:{type:String},
@@ -31,16 +20,16 @@ var articleSchema = new mongoose.Schema({
 	brief:{type:String},
 	article:{type:String},
 	time:{type:Date,default:Date.now}
-})
+});
 var articleModel = con.model("article",articleSchema);
 
-// TestEntity.save(function(error,doc){
-// 	if(error){
-// 		console.log(error);
-// 	}else{
-// 		console.log(doc);
-// 	}
-// })
+var oneBriefSchema = new mongoose.Schema({
+	word:{type:String},
+	source:{type:String},
+	time:{type:Date,default:Date.now}
+});
+var oneBriefModel = con.model("oneBrief",oneBriefSchema);
+
 
 var createFolder = function(folder){
 	try{
@@ -69,10 +58,31 @@ router.get('/',function(req,res,next){
 		for(var i = 0;i < doc.length;i++){
 			doc[i].time_string = doc[i].time.getFullYear()+'-'+doc[i].time.getMonth()+'-'+doc[i].time.getDate();
 		}
-
-		res.render('index',{title:'dongdong',doc:doc});
+		res.render('index',{title:'TD',doc:doc});
 	})
 });
+router.get('/skill',function(req,res,next){
+	articleModel.find({},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
+		res.render('index',{title:'TD',doc:doc});
+	})
+});
+router.get('/poemAndInk',function(req,res,next){
+	articleModel.find({},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
+		res.render('index',{title:'TD',doc:doc});
+	})
+});
+router.get('/oneBrief',function(req,res,next){
+	oneBriefModel.count({},function(err,count){
+		console.log(Math.random()*count);
+		oneBriefModel.findOne({},{source:1,word:1},{skip:Math.random()*count},function(err,doc){
+			console.log(doc)
+			res.render('oneBrief',{title:'言语',doc:doc});
+		})
+	});
+});
+router.get('/oneBriefEdit',function(req,res,next){
+	res.render('oneBriefEdit',{title:'言语录入'})
+})
 
 router.get('/admin/edit',function(req,res,next){
 	res.render('admin/edit',{title:'编辑文章'});
@@ -92,8 +102,17 @@ router.get('/admin/delete',function(req,res,next){
 			res.send({code:200,msg:'delete successfully'});
 		}
 	})
-})
-
+});
+router.post('/addOneBrief',function(req,res,next){
+	var oneBriefEntity = new oneBriefModel(req.body);
+	oneBriefEntity.save(function(err,doc){
+		if(err){
+			res.send({code:400,msg:'add fail'});
+		}else{
+			res.send({code:200,msg:'add success!!!'});
+		}
+	})
+});
 
 router.post('/addArticle',function(req,res,next){
 	var articleEntity = new articleModel(req.body);
