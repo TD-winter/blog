@@ -1,6 +1,5 @@
 var express = require('express');
 var multer = require('multer');
-var moment = require('moment');
 var router = express.Router();
 var fs = require('fs');
 // var mysql = require('mysql');
