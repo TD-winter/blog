@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>matter</title>
+    
+</head>
+<body>
+
+</body>
+<script src="./matter.min.js"></script>
+<script src="/javascripts/socket.io.js"></script>
+<script>
+    var socket = io('/my_namespace');
+    socket.on('connect',function(){
+        socket.emit('hi!');
+    })
+
+    var Engine = Matter.Engine,
+        Render = Matter.Render,
+        Runner = Matter.Runner,
+        Body = Matter.Body,
+        Events = Matter.Events,
+        Composite = Matter.Composite,
+        Composites = Matter.Composites,
+        Common = Matter.Common,
+        MouseConstraint = Matter.MouseConstraint,
+        Mouse = Matter.Mouse,
+        World = Matter.World,
+        Bodies = Matter.Bodies;
+
+    // create engine
+    var engine = Engine.create(),
+        world = engine.world;
+
+        engine.world.gravity.y = 0;
+    // create renderer
+    var render = Render.create({
+        element: document.body,
+        engine: engine,
+        options: {
+            width: 800,
+            height: 600,
+            wireframes: false
+        }
+    });
+    var count = 0;
+    var number = 1;
+
+
+    Render.run(render);
+    // create runner
+    var runner = Runner.create();
+    Runner.run(runner, engine);
+
+    var bodyStyle = { fillStyle: '#222' };
+
+    // scene code
+    World.add(world, [
+        Bodies.rectangle(400, 0, 800, 50, { isStatic: true, render: bodyStyle }),
+        Bodies.rectangle(400, 600, 800, 50, { isStatic: true, render: bodyStyle }),
+        Bodies.rectangle(800, 300, 50, 600, { isStatic: true, render: bodyStyle }),
+        Bodies.rectangle(0, 300, 50, 600, { isStatic: true, render: bodyStyle })
+    ]);
+
+    // var stack = Composites.stack(70, 100, 9, 4, 50, 50, function(x, y) {
+    //     return Bodies.circle(x, y, 15, { restitution: 1, render: bodyStyle });
+    // });
+    
+    var ball = Bodies.circle(500,500,15,{
+        restitution: 1, 
+        render: bodyStyle,
+        frictionAir:0.1
+    });
+    var thr_point = Bodies.polygon(480,500,3,10,{});
+    var cup = Body.create({
+      parts:[ball,thr_point],
+      frictionAir:0.02
+    });
+
+    var ball_1 = Bodies.circle(100,100,15,{
+        restitution: 1, 
+        render: bodyStyle,
+        frictionAir:0.1
+    });
+    var thr_point_1 = Bodies.polygon(80,100,3,10,{});
+    var cup_1 = Body.create({
+      parts:[ball_1,thr_point_1],
+      frictionAir:0.01
+    });
+
+
+
+    World.add(world,[cup,cup_1]);
+    World.add(world,Bodies.circle(Common.random(100,400),Common.random(100,400),15,{
+        render:{
+            fillStyle:'yellow'
+        }
+    }));
+
+    var move_body = Bodies.polygon(200,200,4,20,{
+        render:{fillStyle:'green'}
+    });
+    World.add(world,move_body);
+
+    var shakeScene = function() {
+        console.log(cup);
+        console.log(Common.random(0.01,0.1));
+        var x_vector = thr_point.position.x - ball.position.x;
+        var y_vector = thr_point.position.y - ball.position.y;
+        x_vector = x_vector/Math.sqrt(x_vector * x_vector + y_vector * y_vector);
+        y_vector = y_vector/Math.sqrt(x_vector * x_vector + y_vector * y_vector);
+        Body.applyForce(cup,cup.position, { 
+            x: x_vector * 0.02, 
+            y: y_vector * 0.02
+        });
+        if((count + number + 1) % 5 == 0){
+            World.add(world,Bodies.circle(Common.random(0,800),Common.random(0,600),15,{
+                isStatic: true,
+                render:{
+                    fillStyle:'red'
+                }
+            }))
+        }else{
+            World.add(world,Bodies.circle(Common.random(0,800),Common.random(0,600),15,{
+                render:{
+                    fillStyle:'yellow'
+                }
+            }))
+        }
+
+    };
+
+    // add mouse control
+    var mouse = Mouse.create(render.canvas),
+        mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: {
+                    visible: false
+                }
+            }
+        });
+
+    World.add(world, mouseConstraint);
+
+    // keep the mouse in sync with rendering
+    render.mouse = mouse;
+
+
+    // an example of using mouse events on a mouse
+    Events.on(mouseConstraint, 'mouseup', function(event) {
+        var mousePosition = event.mouse.position;
+        shakeScene(engine);
+        number++;
+        if(number > 10){
+            alert('game over!!!');
+        }
+        console.log(number,count);
+    });
+
+    // an example of using mouse events on a mouse
+    Events.on(mouseConstraint, 'startdrag', function(event) {
+        console.log('startdrag', event);
+    });
+
+    // an example of using mouse events on a mouse
+    Events.on(mouseConstraint, 'enddrag', function(event) {
+        console.log('enddrag', event);
+    });
+
+    // an example of using beforeUpdate event on an engine
+    Events.on(engine, 'beforeUpdate', function(event) {
+        var engine = event.source;
+        // apply random forces every 5 secs
+        Body.rotate(thr_point,0.05,ball.position);
+        socket.emit('sendPosition',{
+           position:cup.position
+        })
+    });
+
+    // an example of using collisionEnd event on an engine
+    Events.on(engine, 'collisionEnd', function(event) {
+        var pairs = event.pairs;
+        // change object colours to show those ending a collision
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            console.log(pair);
+            // pair.bodyA.render.fillStyle = '#222';
+            // pair.bodyB.render.fillStyle = '#222';
+            
+            if(([1,2,3,4].indexOf(pair.bodyA.id) < 0 && pair.bodyB.id == 6) ||
+                ([1,2,3,4].indexOf(pair.bodyB.id) < 0 && pair.bodyA.id == 6)){
+                count++;
+                number--;
+                World.remove(world, pair.bodyB,true);
+            }
+        }
+    });
+
+    socket.on('getPosition',function(data){
+        console.log(data);
+        Body.setPosition(cup_1,data.position);
+    });
+
+
+    // fit the render viewport to the scene
+    Render.lookAt(render, {
+        min: { x: 0, y: 0 },
+        max: { x: 800, y: 600 }
+    });
+    
+</script>
+</html>
