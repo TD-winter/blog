@@ -18,7 +18,7 @@ var credentials = {key:privateKey,cert:certificate};
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '80');
 app.set('port', port);
 var SSLPORT = 443;
 /**
@@ -39,13 +39,36 @@ httpsServer.listen(SSLPORT);
 
 
 var nsp = ioServer.of('/my_namespace');
+var push_data = [];
+var client_id = [];
 nsp.on('connection', function(socket){
-  console.log('someone connected!!!!');
+  client_id.push(socket.id);
+  console.log(client_id);
   socket.on('sendPosition',function(data){
-    console.log(data);
-    nsp.emit('getPosition',data);
+
+    var index_num = client_id.indexOf(data.id);
+    console.log(index_num);
+    if(index_num >= 0){
+      push_data[index_num] = data;
+    }else{
+      push_data.push(data);
+    }
+
+    console.log(push_data);
+  })
+  socket.on('disconnect',function(){
+    console.log('close');
+    var number = client_id.indexOf(socket.id);
+    client_id.splice(number,1);
+    push_data.splice(number,1);
   })
 });
+
+setInterval(function(){
+  if(push_data.length > 0 && push_data[0].id != null){
+    nsp.emit('getPosition',push_data);
+  }
+},14);
 
 ioServer.on('connection',function(socket){
   console.log('someone connected');
