@@ -68,13 +68,14 @@ socket.on('connect',function(){
 	// var stack = Composites.stack(70, 100, 9, 4, 50, 50, function(x, y) {
 	//     return Bodies.circle(x, y, 15, { restitution: 1, render: bodyStyle });
 	// });
-	
-	var ball = Bodies.circle(500,500,15,{
+	var cup_x = Math.random() * 800;
+	var cup_y = Math.random() * 600;
+	var ball = Bodies.circle(cup_x,cup_y,15,{
 		restitution: 1, 
 		render: bodyStyle,
 		frictionAir:0.1
 	});
-	var thr_point = Bodies.polygon(480,500,3,10,{});
+	var thr_point = Bodies.polygon(cup_x - 20,cup_y,3,10,{});
 	var cup = Body.create({
 	  parts:[ball,thr_point],
 	  frictionAir:0.02
@@ -196,12 +197,14 @@ socket.on('connect',function(){
 				number--;
 				World.remove(world, pair.bodyB,true);
 			}
+			if(pair.bodyA.render.fillStyle == 'red' || pair.bodyB.render.fillStyle == 'red'){
+				alert('game over!!!');
+			}
 		}
 	});
 
 	var set_ball = [];
 	socket.on('getPosition',function(data){
-		console.log(data);
 		for(var i = 0;i < data.length;i++){
 			if(set_ball.length < (i+1)){
 				if(own_id != data[i].id){

@@ -53,7 +53,6 @@ nsp.on('connection', function(socket){
     }else{
       push_data.push(data);
     }
-
     console.log(push_data);
   })
   socket.on('disconnect',function(){
