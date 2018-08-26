@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>EJS Examples</title>
+<title>404—X日常</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
 </head>
 <body>
-
+	<input placeholder="格式如：1991-11-17" / >
 	<button id="click">click</button>
+	<div id="main" style="width:800px;height:1000px;"></div>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
+<script src="/javascripts/echarts.common.min.js"></script>
 <script type="text/javascript">
 /*	var domClick = document.getElementById('click');
 	domClick.addEventListener('click',function(){
@@ -23,8 +25,78 @@
 		}
 	})
 	*/
-	$.get('http://localhost:3000/dong',function(res){
-		console.log(res);
-	})
+var myChart = echarts.init(document.getElementById('main'));
+
+var today_value = fmtDate(new Date());
+
+getRecord(today_value);
+$('#click').click(function(){
+	var name_value = $('input').val();
+	getRecord(name_value);
+})
+
+function getRecord(value){
+	$.get('/util/browsingHistory/record?name='+value,function(res){
+	console.log(res);
+	res = res[res.length-1];
+	var array = [];
+	var title_name = [],
+		click_number = [],
+		time_number = [];
+	    for(var i = 0;i < res.record.length;i++){
+	    	title_name.push(res.record[i].title.substring(0,15));
+	    	click_number.push(res.record[i].click);
+	    	time_number.push((res.record[i].time / 1000)/60);
+	    }
+
+		var option = {
+			title:{
+				text:'chrome浏览器使用情况展示'+res.name
+			},
+			tooltip:{
+				trigger:'axis',
+				axisPointer:{
+					type:'shadow'
+				}
+			},
+			legend:{
+				data:['点击次数']
+			},
+			grid:{
+				left:'1%',
+				containLabel:true
+			},
+			xAxis:{
+				type:'value',
+				boundaryGap:[0,0.01]
+			},
+			yAxis:{
+				type:'category',
+				data:title_name
+			},
+			series:[{
+				name:'次数',
+				type:'bar',
+				data:click_number
+			},
+			{
+				name:'停留时间',
+				type:'bar',
+				data:time_number
+			}
+			]
+		};
+
+		myChart.setOption(option);
+	})	
+}
+
+function fmtDate(obj){
+    var date =  new Date(obj);
+    var y = 1900+date.getYear();
+    var m = "0"+(date.getMonth()+1);
+    var d = "0"+date.getDate();
+    return y+"-"+m.substring(m.length-2,m.length)+"-"+d.substring(d.length-2,d.length);
+}
 </script>
 </html>
