@@ -29,6 +29,12 @@ var oneBriefSchema = new mongoose.Schema({
 });
 var oneBriefModel = con.model("oneBrief",oneBriefSchema);
 
+var operationRecordSchema = new mongoose.Schema({
+	name:{type:String},
+	record:{type:Array},
+	time:{type:Date,default:Date.now}
+});
+var operationRecordModel = con.model("operationRecord",operationRecordSchema);
 
 var createFolder = function(folder){
 	try{
@@ -164,7 +170,27 @@ router.get('/dddd',function(req,res,next){
 
 router.post('/util/browsingHistory',function(req,res,next){
 	console.log(req.body);
+<<<<<<< HEAD
 	res.send({code:200,msg:'Added successfully'});
+=======
+	var operationRecordEntity = new operationRecordModel(req.body);
+	operationRecordEntity.save(function(err,doc){
+		if(err){
+			console.log(err)
+		}else{
+			res.send({code:200,msg:'Added successfully'});
+		}
+	})
+	// res.send({code:200,msg:'Added successfully'});
+})
+
+router.get('/util/browsingHistory/record',function(req,res,next){
+	console.log(req.query.name);
+	operationRecordModel.find({"name":req.query.name},function(err,doc){
+		console.log(doc);
+		res.send(doc);
+	})
+>>>>>>> c7a394561205c3d1dd84acff8c2669a68640e2c9
 })
 
 module.exports = router;
