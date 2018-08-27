@@ -170,9 +170,6 @@ router.get('/dddd',function(req,res,next){
 
 router.post('/util/browsingHistory',function(req,res,next){
 	console.log(req.body);
-<<<<<<< HEAD
-	res.send({code:200,msg:'Added successfully'});
-=======
 	var operationRecordEntity = new operationRecordModel(req.body);
 	operationRecordEntity.save(function(err,doc){
 		if(err){
@@ -190,7 +187,6 @@ router.get('/util/browsingHistory/record',function(req,res,next){
 		console.log(doc);
 		res.send(doc);
 	})
->>>>>>> c7a394561205c3d1dd84acff8c2669a68640e2c9
 })
 
 module.exports = router;
