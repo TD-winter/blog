@@ -161,4 +161,10 @@ router.get('/dddd',function(req,res,next){
 		}
 	})
 });
+
+router.post('/util/browsingHistory',function(req,res,next){
+	console.log(req.body);
+	res.send({code:200,msg:'Added successfully'});
+})
+
 module.exports = router;
