@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- <html manifest="index.manifest"> -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>村农</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link type="text/css" rel="styleSheet" href="/stylesheets/style.css">
+<style>
+	.text_input{margin:10px auto;border-radius:4px;display:block;}
+	.child_spread{width:46px;height:20px;font-size:11px;background: #FFF;border: 1px solid #ccc;border-radius: 4px;}
+	.child_show{width:400px;margin:auto;}
+	.child_person_show{border-bottom:1px solid #ccc;}
+	.child_name,.child_text,.child_start{display:inline-block;vertical-align:middle;}
+	.child_text{width:300px;text-align:left;}
+	.child_start{color:red;}
+</style>
+</head>
+<body>
+ 	<% for(var i = 0;i < 10;i++){ %>
+		<textarea class="text_input" rank=<%= i %> ></textarea>
+		<% if(i != 0){ %>
+			<button class="child_spread">展开</button>
+		<% } %>
+	<% } %>
+	<div class="child_show">
+		<div class="child_person_show">
+			<span class="child_name">TD:</span>
+			<p class="child_text">我还是个孩子我还是个孩子我还是个孩子我还是个孩子</p>
+			<span class="child_start">0</span>
+		</div>
+	</div>
+</body>
+<script src="/javascripts/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+
+var data = [{
+		name:'TD',
+		content:'在一个风高月黑的夜晚',
+		start:1
+	},{
+		name:'TD',
+		content:'在一个风高月黑的夜晚',
+		start:1
+	},{
+		name:'TD',
+		content:'在一个风高月黑的夜晚',
+		start:1
+	},{
+		name:'TD',
+		content:'在一个风高月黑的夜晚',
+		start:1
+	},{
+		name:'TD',
+		content:'在一个风高月黑的夜晚',
+		start:1
+	}
+];
+
+var AppendDom = function(data){
+	this.dom = $('.child_show').clone();
+	// this.addText  = function(){
+	// 	for(var i = 0,len = data.length;i < len;i++){
+	// 		var child_person_show_dom = $('.child_person_show').eq(0).clone();
+	// 		child_person_show_dom.find('.child_name').text(data[i].name);
+	// 		child_person_show_dom.find('.child_text').text(data[i].content);
+	// 		child_person_show_dom.find('.child_start').text(data[i].start);
+	// 		dom.append(child_person_show_dom);
+	// 	}
+
+	// }
+
+}
+
+AppendDom.prototype = {
+	addText : function(this_dom){
+		for(var i = 0,len = data.length;i < len;i++){
+			var child_person_show_dom = $('.child_person_show').eq(0).clone();
+			child_person_show_dom.find('.child_name').text(data[i].name);
+			child_person_show_dom.find('.child_text').text(data[i].content);
+			child_person_show_dom.find('.child_start').text(data[i].start);
+			this.dom.append(child_person_show_dom);
+		}
+		this_dom.after(this.dom);
+	},
+	addDom : function(){
+
+	}
+}
+
+var addContent = new AppendDom(data);
+$('.child_spread').click(function(){
+	addContent.addText($(this));
+})
+
+
+</script>
+</html>

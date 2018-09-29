@@ -8,6 +8,7 @@ var ueditor = require("ueditor");
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var mobile = require('./routes/mobile');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/mobile', mobile);
 
 app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, res, next) {
     //客户端上传文件设置
