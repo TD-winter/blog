@@ -19,12 +19,14 @@
 </style>
 </head>
 <body>
- 	<% for(var i = 0;i < 10;i++){ %>
-		<textarea class="text_input" rank=<%= i %> ></textarea>
+ 	<% for(var i in data){ %>
+		<textarea class="text_input" data-rank=<%= data[i].rank %> value=<%= data[i].storyContent %> ><%= data[i].storyContent %></textarea>
 		<% if(i != 0){ %>
 			<button class="child_spread">展开</button>
+			<div class="child_content_div"></div>
 		<% } %>
 	<% } %>
+	<buton id="submitData">提交</buton>
 	<div class="child_show">
 		<div class="child_person_show">
 			<span class="child_name">TD:</span>
@@ -60,8 +62,10 @@ var data = [{
 ];
 
 var AppendDom = function(data){
-	this.dom = $('.child_show').clone();
-	// this.addText  = function(){
+	var child_show_len = $('.child_show').length;
+	this.dom = $('.child_show').eq(child_show_len-1).clone();
+	console.log($('.child_show')[0]);
+	// this.addText  = function(this_dom){
 	// 	for(var i = 0,len = data.length;i < len;i++){
 	// 		var child_person_show_dom = $('.child_person_show').eq(0).clone();
 	// 		child_person_show_dom.find('.child_name').text(data[i].name);
@@ -69,7 +73,7 @@ var AppendDom = function(data){
 	// 		child_person_show_dom.find('.child_start').text(data[i].start);
 	// 		dom.append(child_person_show_dom);
 	// 	}
-
+	// 	this_dom.after(dom);
 	// }
 
 }
@@ -83,18 +87,37 @@ AppendDom.prototype = {
 			child_person_show_dom.find('.child_start').text(data[i].start);
 			this.dom.append(child_person_show_dom);
 		}
-		this_dom.after(this.dom);
+		this_dom.empty();
+		this_dom.append(this.dom);
 	},
 	addDom : function(){
 
 	}
 }
 
-var addContent = new AppendDom(data);
 $('.child_spread').click(function(){
-	addContent.addText($(this));
+	var addContent = new AppendDom(data);
+	addContent.addText($(this).next());
 })
 
+$('#submitData').click(function(){
+	var data_array = [];
+	for(var i = 0;i < 10;i++){
+		var data_obj = {
+			storyId:2,
+			fatherId:$('.text_input:eq('+i+')').attr('data-rank')-1,
+			rank:$('.text_input:eq('+i+')').attr('data-rank'),
+			start:0,
+			storyContent:$('.text_input:eq('+i+')').val(),
+			person:'TD'
+		}
+		data_array.push(data_obj);
+	}
+	console.log(data_array)
+	$.post('/mobile/story/detail',{data:JSON.stringify(data_array)},function(res){
+		console.log(res);
+	});
+})
 
 </script>
 </html>
