@@ -31,7 +31,7 @@ router.get('/', function(req, res, next) {
 		{$project:{storyId:1,rank:1,start:1,storyContent:1,person:1,time:1}},
 		{$sort:{start:-1}},
 		{$group :{
-			_id:null,
+			_id:$rank,
 			// storyId:"$storyId",
 			// rank:"$rank",
 			// start:"$start",
