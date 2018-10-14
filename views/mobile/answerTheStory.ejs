@@ -34,7 +34,7 @@
 
 <div style="display:block;margin-top:10px;">
 	<input id="rank" class="submit_input" placeholder="rank" />
-	<input id="star" class="submit_input" placeholder="star" />
+	<!-- <input id="star" class="submit_input" placeholder="star" /> -->
 	<textarea id="storyContent" class="submit_input" placeholder="storyContent"></textarea>
 </div>
 	<botton id="submitData">提交</botton>
@@ -110,7 +110,7 @@ $('#submitData').click(function(){
 		storyId : location.search.split('=')[1],
 		fatherId : fatherId_value,
 		rank : rank_value,
-		start : $('#star').val() || 1,
+		start : 1,
 		storyContent : $('#storyContent').val(),
 		person : 'TD'
 	}
