@@ -9,61 +9,51 @@
 <meta name="keywords" content="">
 <link type="text/css" rel="styleSheet" href="/stylesheets/style.css">
 <style>
-	.text_input{margin:10px auto;border-radius:4px;display:block;}
+	.text_input{width:400px;margin:10px auto;color:#333;font-size:18px;display:block;}
 	.child_spread{width:46px;height:20px;font-size:11px;background: #FFF;border: 1px solid #ccc;border-radius: 4px;}
 	.child_show{width:400px;margin:auto;}
 	.child_person_show{border-bottom:1px solid #ccc;}
-	.child_name,.child_text,.child_start{display:inline-block;vertical-align:middle;}
-	.child_text{width:300px;text-align:left;}
-	.child_start{color:red;}
+	.child_name,.child_text,.child_star{display:inline-block;vertical-align:middle;}
+	.child_text{width:300px;text-align:left;color:#666;font-size:16px;}
+	.child_star{color:red;cursor:pointer;}
+	.submit_input{width:30px;border:1px solid #999;border-radius:4px;padding:5px;color:#666;vertical-align: top;}
+	#storyContent{width:500px;height:100px;}
+	#submitData{width:60px;margin:10px auto;padding:5px 10px;border:1px solid #999;border-radius:5px;cursor:pointer;display:block;}
 </style>
 </head>
 <body>
  	<% for(var i in data){ %>
-		<textarea class="text_input" data-rank=<%= data[i].rank %> value=<%= data[i].storyContent %> ><%= data[i].storyContent %></textarea>
+		<p class="text_input" data-rank="<%= data[i].rank %>" value="<%= data[i].storyContent %>" ><%= data[i].storyContent %>
+			<span class="child_star" data-id="<%= data[i].id %>"><%= data[i].start %></span>
+		</p>
 		<% if(i != 0){ %>
-			<button class="child_spread">展开</button>
+			<button class="child_spread" data-rank="<%= data[i].rank %>">展开</button>
 			<div class="child_content_div"></div>
 		<% } %>
 	<% } %>
-	<buton id="submitData">提交</buton>
-	<div class="child_show">
+
+<div style="display:block;margin-top:10px;">
+	<input id="rank" class="submit_input" placeholder="rank" />
+	<input id="star" class="submit_input" placeholder="star" />
+	<textarea id="storyContent" class="submit_input" placeholder="storyContent"></textarea>
+</div>
+	<botton id="submitData">提交</botton>
+	<div class="child_show" style="display:none;">
 		<div class="child_person_show">
 			<span class="child_name">TD:</span>
 			<p class="child_text">我还是个孩子我还是个孩子我还是个孩子我还是个孩子</p>
-			<span class="child_start">0</span>
+			<span class="child_star">0</span>
 		</div>
 	</div>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
 <script type="text/javascript">
 
-var data = [{
-		name:'TD',
-		content:'在一个风高月黑的夜晚',
-		start:1
-	},{
-		name:'TD',
-		content:'在一个风高月黑的夜晚',
-		start:1
-	},{
-		name:'TD',
-		content:'在一个风高月黑的夜晚',
-		start:1
-	},{
-		name:'TD',
-		content:'在一个风高月黑的夜晚',
-		start:1
-	},{
-		name:'TD',
-		content:'在一个风高月黑的夜晚',
-		start:1
-	}
-];
 
-var AppendDom = function(data){
+function AppendDom(data){
 	var child_show_len = $('.child_show').length;
 	this.dom = $('.child_show').eq(child_show_len-1).clone();
+	this.data = data;
 	console.log($('.child_show')[0]);
 	// this.addText  = function(this_dom){
 	// 	for(var i = 0,len = data.length;i < len;i++){
@@ -80,15 +70,16 @@ var AppendDom = function(data){
 
 AppendDom.prototype = {
 	addText : function(this_dom){
-		for(var i = 0,len = data.length;i < len;i++){
+		this.dom.empty();
+		for(var i = 0,len = this.data.length;i < len;i++){
 			var child_person_show_dom = $('.child_person_show').eq(0).clone();
-			child_person_show_dom.find('.child_name').text(data[i].name);
-			child_person_show_dom.find('.child_text').text(data[i].content);
-			child_person_show_dom.find('.child_start').text(data[i].start);
+			child_person_show_dom.find('.child_name').text(this.data[i].person);
+			child_person_show_dom.find('.child_text').text(this.data[i].storyContent);
+			child_person_show_dom.find('.child_star').text(this.data[i].start).attr('data-id',this.data[i]._id);
 			this.dom.append(child_person_show_dom);
 		}
 		this_dom.empty();
-		this_dom.append(this.dom);
+		this_dom.append(this.dom.show());
 	},
 	addDom : function(){
 
@@ -96,27 +87,51 @@ AppendDom.prototype = {
 }
 
 $('.child_spread').click(function(){
-	var addContent = new AppendDom(data);
-	addContent.addText($(this).next());
+	var self = this,
+		rank_id = $(this).data('rank');
+	$.get('/mobile/story/rank?storyId='+location.search.split('=')[1]+'&rank='+rank_id,function(data){
+		console.log(data);
+		var addContent = new AppendDom(data);
+		addContent.addText($(self).next());
+	})
 })
 
 $('#submitData').click(function(){
 	var data_array = [];
-	for(var i = 0;i < 10;i++){
-		var data_obj = {
-			storyId:2,
-			fatherId:$('.text_input:eq('+i+')').attr('data-rank')-1,
-			rank:$('.text_input:eq('+i+')').attr('data-rank'),
-			start:0,
-			storyContent:$('.text_input:eq('+i+')').val(),
-			person:'TD'
-		}
-		data_array.push(data_obj);
+	var flag = $('.text_input').length;
+	if(flag > 0){
+		var fatherId_value = ($('#rank').val() - 1) > 1 ? ($('#rank').val() - 1) : 1 || 1;
+		var rank_value = $('#rank').val() > 1 ? $('#rank').val() : 2 || 2;
+	}else{
+		var fatherId_value = 0;
+		var rank_value = 1
 	}
-	console.log(data_array)
+	var data_obj = {
+		storyId : location.search.split('=')[1],
+		fatherId : fatherId_value,
+		rank : rank_value,
+		start : $('#star').val() || 1,
+		storyContent : $('#storyContent').val(),
+		person : 'TD'
+	}
+	data_array.push(data_obj);
+	console.log(data_array);
 	$.post('/mobile/story/detail',{data:JSON.stringify(data_array)},function(res){
 		console.log(res);
+		location.reload();
 	});
+})
+
+$(document).on('click','.child_star',function(){
+	var id = $(this).data('id'),
+	self = this,
+	this_number = parseInt($(this).text());
+	$.get('/mobile/story/star?id=' + id,function(res){
+		console.log(res);
+		if(res.code == 200){
+			$(self).text(this_number + 1);
+		}
+	})
 })
 
 </script>
