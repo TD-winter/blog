@@ -25,7 +25,6 @@ router.get('/', function(req, res, next) {
 	// 	res.render('mobile/answerTheStory',{data:doc});
 	// })
 
-
 	theStoryModel.aggregate([
 		{$match:{storyId:parseInt(req.query.id)}},
 		{$project:{storyId:1,rank:1,start:1,storyContent:1,person:1,time:1}},
