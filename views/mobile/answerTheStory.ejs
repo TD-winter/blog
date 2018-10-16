@@ -23,7 +23,7 @@
 </head>
 <body>
  	<% for(var i in data){ %>
-		<p class="text_input" data-rank="<%= data[i].rank %>" value="<%= data[i].storyContent %>" ><%= data[i].rank %>、 <%= data[i].storyContent %>
+		<p class="text_input" data-rank="<%= data[i].rank %>" value="<%= data[i].storyContent %>" ><%= data[i].rank %>、 <%= data[i].storyContent %>（<%= data[i].person %>）
 			<span class="child_star" data-id="<%= data[i].id %>"><%= data[i].start %></span>
 		</p>
 		<% if(i != 0){ %>
