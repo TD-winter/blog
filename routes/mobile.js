@@ -64,7 +64,7 @@ router.get('/', function(req, res, next) {
 // 获取某一级的数据
 router.get('/story/rank',function(req,res,next){
 	theStoryModel.find({rank:req.query.rank,storyId:req.query.storyId},
-		{_id:1,storyId:1,rank:1,start:1,storyContent:1,person:1,time:1},function(err,doc){
+		{_id:1,start:1,storyContent:1,person:1,time:1},{sort:{start:-1},skip:1},function(err,doc){
 			res.json(doc);
 		})
 })
