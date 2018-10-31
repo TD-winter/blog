@@ -9,21 +9,21 @@
 <meta name="keywords" content="">
 <link type="text/css" rel="styleSheet" href="/stylesheets/style.css">
 <style>
-	.text_input{width:400px;margin:10px auto;color:#333;font-size:18px;display:block;}
+	.text_input{width:400px;margin:6px auto;color:#333;text-align:left;font-size:18px;display:block;}
 	.child_spread{width:46px;height:20px;font-size:11px;background: #FFF;border: 1px solid #ccc;border-radius: 4px;}
 	.child_show{width:400px;margin:auto;}
 	.child_person_show{border-bottom:1px solid #ccc;}
 	.child_name,.child_text,.child_star{display:inline-block;vertical-align:middle;}
-	.child_text{width:300px;text-align:left;color:#666;font-size:16px;}
+	.child_text{width:300px;margin:8px 4px;text-align:left;color:#666;font-size:16px;}
 	.child_star{color:red;cursor:pointer;}
-	.submit_input{width:30px;border:1px solid #999;border-radius:4px;padding:5px;color:#666;vertical-align: top;}
+	.submit_input{width:50px;border:1px solid #999;border-radius:4px;padding:5px;color:#666;vertical-align: top;}
 	#storyContent{width:500px;height:100px;}
 	#submitData{width:60px;margin:10px auto;padding:5px 10px;border:1px solid #999;border-radius:5px;cursor:pointer;display:block;}
 </style>
 </head>
 <body>
  	<% for(var i in data){ %>
-		<p class="text_input" data-rank="<%= data[i].rank %>" value="<%= data[i].storyContent %>" ><%= data[i].storyContent %>
+		<p class="text_input" data-rank="<%= data[i].rank %>" value="<%= data[i].storyContent %>" ><%= data[i].rank %>、 <%= data[i].storyContent %>（<%= data[i].person %>）
 			<span class="child_star" data-id="<%= data[i].id %>"><%= data[i].start %></span>
 		</p>
 		<% if(i != 0){ %>
@@ -33,7 +33,8 @@
 	<% } %>
 
 <div style="display:block;margin-top:10px;">
-	<input id="rank" class="submit_input" placeholder="rank" />
+	<input id="rank" class="submit_input" placeholder="第几条" />
+	<input id="person" class="submit_input" placeholder="名字" />
 	<!-- <input id="star" class="submit_input" placeholder="star" /> -->
 	<textarea id="storyContent" class="submit_input" placeholder="storyContent"></textarea>
 </div>
@@ -48,13 +49,11 @@
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
 <script type="text/javascript">
-
-
 function AppendDom(data){
 	var child_show_len = $('.child_show').length;
+	$('.child_show').hide();
 	this.dom = $('.child_show').eq(child_show_len-1).clone();
 	this.data = data;
-	console.log($('.child_show')[0]);
 	// this.addText  = function(this_dom){
 	// 	for(var i = 0,len = data.length;i < len;i++){
 	// 		var child_person_show_dom = $('.child_person_show').eq(0).clone();
@@ -65,15 +64,13 @@ function AppendDom(data){
 	// 	}
 	// 	this_dom.after(dom);
 	// }
-
 }
-
 AppendDom.prototype = {
 	addText : function(this_dom){
 		this.dom.empty();
 		for(var i = 0,len = this.data.length;i < len;i++){
 			var child_person_show_dom = $('.child_person_show').eq(0).clone();
-			child_person_show_dom.find('.child_name').text(this.data[i].person);
+			child_person_show_dom.find('.child_name').text(this.data[i].person+'： ');
 			child_person_show_dom.find('.child_text').text(this.data[i].storyContent);
 			child_person_show_dom.find('.child_star').text(this.data[i].start).attr('data-id',this.data[i]._id);
 			this.dom.append(child_person_show_dom);
@@ -82,10 +79,8 @@ AppendDom.prototype = {
 		this_dom.append(this.dom.show());
 	},
 	addDom : function(){
-
 	}
 }
-
 $('.child_spread').click(function(){
 	var self = this,
 		rank_id = $(this).data('rank');
@@ -95,7 +90,6 @@ $('.child_spread').click(function(){
 		addContent.addText($(self).next());
 	})
 })
-
 $('#submitData').click(function(){
 	var data_array = [];
 	var flag = $('.text_input').length;
@@ -112,7 +106,7 @@ $('#submitData').click(function(){
 		rank : rank_value,
 		start : 1,
 		storyContent : $('#storyContent').val(),
-		person : 'TD'
+		person : $('#person').val() || 'TD'
 	}
 	data_array.push(data_obj);
 	console.log(data_array);
@@ -121,7 +115,6 @@ $('#submitData').click(function(){
 		location.reload();
 	});
 })
-
 $(document).on('click','.child_star',function(){
 	var id = $(this).data('id'),
 	self = this,
@@ -133,6 +126,5 @@ $(document).on('click','.child_star',function(){
 		}
 	})
 })
-
 </script>
 </html>
