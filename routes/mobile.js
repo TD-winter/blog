@@ -25,22 +25,24 @@ router.get('/', function(req, res, next) {
 	// 	res.render('mobile/answerTheStory',{data:doc});
 	// })
 
-
 	theStoryModel.aggregate([
 		{$match:{storyId:parseInt(req.query.id)}},
-		{$project:{storyId:1,rank:1,start:1,storyContent:1,person:1,time:1}},
+		//{$project:{storyId:1,rank:1,start:1,storyContent:1,person:1,time:1}},
 		{$sort:{start:-1}},
 		{$group :{
-			_id:null,
-			// storyId:"$storyId",
-			// rank:"$rank",
-			// start:"$start",
-			storyContent:{$first:'$storyContent'}
-			// person:"$person",
-			// time:"$time"
+			_id:"$rank",
+			storyId:{$first:'$storyId'},
+			rank:{$first:'$rank'},
+			start:{$first:'$start'},
+			storyContent:{$first:'$storyContent'},
+			person:{$first:'$person'},
+			time:{$first:'$time'},
 		}}
 
 	],function(err,doc){
+		doc.sort(function(a,b){
+			return a.rank - b.rank
+		});
 		console.log(doc);
 		res.render('mobile/answerTheStory',{data:doc});
 	})
