@@ -49,8 +49,6 @@
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
 <script type="text/javascript">
-
-
 function AppendDom(data){
 	var child_show_len = $('.child_show').length;
 	$('.child_show').hide();
@@ -66,9 +64,7 @@ function AppendDom(data){
 	// 	}
 	// 	this_dom.after(dom);
 	// }
-
 }
-
 AppendDom.prototype = {
 	addText : function(this_dom){
 		this.dom.empty();
@@ -83,10 +79,8 @@ AppendDom.prototype = {
 		this_dom.append(this.dom.show());
 	},
 	addDom : function(){
-
 	}
 }
-
 $('.child_spread').click(function(){
 	var self = this,
 		rank_id = $(this).data('rank');
@@ -96,7 +90,6 @@ $('.child_spread').click(function(){
 		addContent.addText($(self).next());
 	})
 })
-
 $('#submitData').click(function(){
 	var data_array = [];
 	var flag = $('.text_input').length;
@@ -122,7 +115,6 @@ $('#submitData').click(function(){
 		location.reload();
 	});
 })
-
 $(document).on('click','.child_star',function(){
 	var id = $(this).data('id'),
 	self = this,
@@ -134,6 +126,5 @@ $(document).on('click','.child_star',function(){
 		}
 	})
 })
-
 </script>
 </html>
