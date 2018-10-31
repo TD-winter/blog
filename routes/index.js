@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 // var faceInfo = require('../util/face.js');
 var faceInfo = require('../util/qq_face.js');
 
-mongoose.connect('mongodb://localhost:27017/dong');
+mongoose.connect('mongodb://localhost:27017/dong',{ useNewUrlParser: true });
 
 const con = mongoose.connection;
 
