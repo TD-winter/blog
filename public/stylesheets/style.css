@@ -29,7 +29,7 @@ header p{margin-left:20px;display:inline-block;}
 .page h6{margin:0;}
 
 /*oneBrief言语页面*/
-.word{width:75%;height:300px;margin:200px auto;}
+.word{width:75%;height:300px;margin:200px auto 0px;}
 .word h1{text-align:left;}
 .word p{font-size:20px;text-align:right;}
 
