@@ -154,6 +154,7 @@ router.get('/page',function(req,res,next){
 // });
 router.post('/face/info',upload.single('pic'),function(req,res,next){
     var file = req.file;
+    console.log(file);
 	faceInfo(res,file.path);
 })
 

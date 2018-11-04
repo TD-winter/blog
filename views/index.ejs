@@ -70,6 +70,21 @@
 		if(event.keyCode == 13){
 			$('.message_submit').trigger("click");
 		}
-	})
+	});
+// pwa
+	if(navigator.serviceWorker != null){
+		var sw = navigator.serviceWorker;
+		navigator.serviceWorker.register('/sw.js',{scope:"/"}).then(function(registration){
+			window.registration = registration;
+		});
+
+		if(sw.controller){
+			sw.controller.postMessage('SW!!!');
+
+			sw.addEventListener('message',event => {
+				console.log(event.data);
+			});
+		}
+	}
 </script>
 </html>
