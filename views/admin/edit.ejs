@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title><%= title %></title>
+    <title><%= doc[0].title %></title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
@@ -17,10 +17,13 @@
 </head>
 <body>
 <div>
-    <h3><%= title %></h3>
-    <label>标题：</label><input id="title" /><br />
-    <label>作者：</label><input id="writer" /><br />
-    <label>概要：</label><textarea id="brief" placeholder="简要概述"></textarea>
+    <h3>编辑文章</h3>
+    <label>标题：</label><input id="title" value="<%= doc[0].title %>" /><br />
+    <label>作者：</label><input id="writer" value="<%= doc[0].writer %>" /><br />
+    <label>类别：</label><input id="classification" value="<%= doc[0].classification %>" /><br />
+    <label>权限：</label><input id="right" value="<%= doc[0].right %>" /><br />
+    <label>概要：</label><textarea id="brief" placeholder="简要概述"><%= doc[0].brief %></textarea>
+    <input type="hidden" id="article" value="<%= doc[0].article %>" />
     <script id="editor" type="text/plain" style="width:880px;height:600px;"></script>
     <button id="getContent" onclick="getContent()">提交</button>
 </div>
@@ -32,18 +35,29 @@
     var ue = UE.getEditor('editor',{
          autoHeight: false
     });
+    ue.ready(function() {
+        console.log($('#article').val());
+        ue.setContent($('#article').val());
+    });
     function getContent(){
         ue.ready(function() {
             var html = ue.getContent();
             console.log(html);
+            var _id = location.search.split('=')[1];
             var title = $('#title').val();
             var writer = $('#writer').val();
             var brief = $('#brief').val();
-            $.post('/addArticle',{
+            var classification = $('#classification').val();
+            var right = $('#right').val();
+            console.log(_id);
+            $.post('/editArticle',{
+                _id:_id,
                 title:title,
                 writer:writer,
                 article:html,
-                brief:brief
+                brief:brief,
+                classification:classification,
+                right:right
             },function(res){
                 console.log(res)
                 if(res.code == 200){

@@ -18,6 +18,8 @@ var articleSchema = new mongoose.Schema({
 	writer:{type:String},
 	brief:{type:String},
 	article:{type:String},
+	classification:{type:Number,default:1},
+	right:{type:Number,default:1},
 	time:{type:Date,default:Date.now}
 });
 var articleModel = con.model("article",articleSchema);
@@ -59,7 +61,8 @@ var upload = multer({storage: storage});
 /* GET home page. */
 
 router.get('/',function(req,res,next){
-	articleModel.find({},{title:1,writer:1,brief:1,time:1},{sort:{'time':-1}},function(err,doc){
+	articleModel.find({"right":1,"classification":1},{title:1,writer:1,brief:1,time:1},{sort:{'time':-1}},function(err,doc){
+		console.log(doc);
 		for(var i = 0;i < doc.length;i++){
 			doc[i].time_string = doc[i].time.getFullYear()+'-'+doc[i].time.getMonth()+'-'+doc[i].time.getDate();
 		}
@@ -89,9 +92,18 @@ router.get('/oneBriefEdit',function(req,res,next){
 	res.render('oneBriefEdit',{title:'言语录入'})
 })
 
-router.get('/admin/edit',function(req,res,next){
-	res.render('admin/edit',{title:'编辑文章'});
+router.get('/admin/add',function(req,res,next){
+	res.render('admin/add',{title:'编辑文章'});
 });
+router.get('/admin/edit',function(req,res,next){
+	var id = req.query.id;
+	console.log(id);
+	articleModel.find({"_id":id},{title:1,writer:1,article:1,brief:1,classification:1,right:1},function(err,doc){
+		console.log(doc);
+		res.render('admin/edit',{doc:doc});
+	});
+});
+
 router.get('/admin/list',function(req,res,next){
 	articleModel.find({},{title:1,writer:1},{sort:{'time':-1}},function(err,doc){
 		res.render('admin/list',{title:'pageList',doc:doc});
@@ -120,7 +132,7 @@ router.post('/addOneBrief',function(req,res,next){
 });
 
 router.post('/addArticle',function(req,res,next){
-	var articleEntity = new articleModel(req.body);
+	var articleEntity = new articleModel(req.body,false);
 	articleEntity.save(function(err,doc){
 		if(err){
 			console.log(err)
@@ -128,7 +140,20 @@ router.post('/addArticle',function(req,res,next){
 			res.send({code:200,msg:'Added successfully'});
 		}
 	})
-})
+});
+router.post('/editArticle',function(req,res,next){
+	console.log(req.body);
+	// var articleEntity = new articleModel(req.body);
+	articleModel.update({'_id':req.body._id},req.body,function(err,doc){
+		if(err){
+			console.log({code:400,msg:'add fail'})
+		}else{
+			res.send({code:200,msg:'Added successfully'});
+		}
+	})
+});
+
+
 router.get('/page',function(req,res,next){
 	articleModel.find({"_id":req.query.id},function(err,doc){
 		console.log(doc);

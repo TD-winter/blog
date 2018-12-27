@@ -16,6 +16,7 @@
 	.message_box{width:100%;height:500px;box-shadow:0 0 5px #ccc;overflow:scroll;}
 	.message_send{width:80%;height:30px;}
 	.message_submit{width:15%;height:36px;}
+	.edit_page{border: 1px solid #999;padding: 4px 8px;font-size: 13px;border-radius: 4px;}
 </style>
 </head>
 <body>
@@ -26,6 +27,7 @@
 					<h3><%= doc[i].title %></h3>
 					<p><%= doc[i].writer %></p>
 				</a>
+				<a class="edit_page" href="/admin/edit?id=<%= doc[i]._id %>">编辑</a>
 				<button class="delete_page" value="<%= doc[i]._id %>">删除</button>
 			</li>
 		<% } %>
@@ -41,6 +43,6 @@
 				location.reload();
 			}
 		})
-	})
+	});
 </script>
 </html>
