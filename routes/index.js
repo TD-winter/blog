@@ -70,12 +70,12 @@ router.get('/',function(req,res,next){
 	})
 });
 router.get('/skill',function(req,res,next){
-	articleModel.find({},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
+	articleModel.find({"right":1,"classification":1},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
 		res.render('index',{title:'TD',doc:doc});
 	})
 });
 router.get('/poemAndInk',function(req,res,next){
-	articleModel.find({},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
+	articleModel.find({"right":1,"classification":2},{title:1,writer:1,brief:1},{sort:{'time':-1}},function(err,doc){
 		res.render('index',{title:'TD',doc:doc});
 	})
 });
