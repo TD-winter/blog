@@ -1,14 +1,14 @@
-body{text-align:center;font-family:'KaiTi';}
+body{text-align:center;font-family:'KaiTi';padding:0;margin:0;}
 a{text-decoration:none;color:#333;display:block;}
 a:hover{text-decoration:underline;color:#0d73b0;}
 li{list-style: none;}
 header{text-align:left;}
-header h3{display:inline-block;}
-header p{margin-left:20px;display:inline-block;}
+header h3{margin:20px 0px;padding:0px;display:inline-block;font-family: 'KaiTi';font-size:24px;}
+header p{margin:20px;padding:0px;display:inline-block;font-family: 'KaiTi';font-size:18px;}
 .header_a{display:inline-block;text-decoration:none;}
 .header_a:hover{color:#333;display:inline-block;text-decoration:none;}
-.header_ul{float:right;margin-bottom:0;margin-top:20px;}
-.header_ul li{margin:auto 10px;display:inline-block;vertical-align: middle;}
+.header_ul{float:right;margin-bottom:0;margin-top:24px;padding:0;}
+.header_ul li{margin:0 10px;padding:0;display:inline-block;vertical-align: middle;font-family: 'KaiTi';font-size:18px;}
 .header_ul li a{padding:2px 5px;border:1px solid #fff;border-radius:4px;}
 .header_ul li a:hover{text-decoration: none;border:1px solid #0d73b0;}
 .content_box{width:100%;max-width:1000px;min-width:600px;margin:auto;}
@@ -71,3 +71,22 @@ header p{margin-left:20px;display:inline-block;}
 	color: #0d73b0;
 	border:1px solid #0d73b0;
 }
+
+/*@media screen and (min-width:360px) and (max-width:374px) and (orientation:portrait) {
+    html { font-size: 703%; }
+}
+@media screen and (min-width:375px) and (max-width:383px) and (orientation:portrait) {
+    html { font-size: 732.4%; }
+}
+@media screen and (min-width:384px) and (max-width:399px) and (orientation:portrait) {
+    html { font-size: 750%; }
+}
+@media screen and (min-width:400px) and (max-width:413px) and (orientation:portrait) {
+    html { font-size: 781.25%; }
+}
+@media screen and (min-width:414px) and (max-width:431px) and (orientation:portrait){
+    html { font-size: 808.6%; }
+}
+@media screen and (min-width:432px) and (max-width:479px) and (orientation:portrait){
+    html { font-size: 843.75%; }
+}*/

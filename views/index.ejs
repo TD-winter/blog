@@ -7,11 +7,13 @@
 	<title>村农</title>
 	<meta name="description" content="">
 	<meta name="keywords" content="">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link type="text/css" rel="styleSheet" href="/stylesheets/style.css">
 </head>
 <body>
 	<div class="content_box">
 		<%- include("./header.ejs") %>
+
 		<ul class="index_ul">
 			<% for(var i in doc){ %>
 				<li class="page_list">
@@ -72,19 +74,19 @@
 		}
 	});
 // pwa
-	if(navigator.serviceWorker != null){
-		var sw = navigator.serviceWorker;
-		navigator.serviceWorker.register('/sw.js',{scope:"/"}).then(function(registration){
-			window.registration = registration;
-		});
+	// if(navigator.serviceWorker != null){
+	// 	var sw = navigator.serviceWorker;
+	// 	navigator.serviceWorker.register('/sw.js',{scope:"/"}).then(function(registration){
+	// 		window.registration = registration;
+	// 	});
 
-		if(sw.controller){
-			sw.controller.postMessage('SW!!!');
+	// 	if(sw.controller){
+	// 		sw.controller.postMessage('SW!!!');
 
-			sw.addEventListener('message',event => {
-				console.log(event.data);
-			});
-		}
-	}
+	// 		sw.addEventListener('message',event => {
+	// 			console.log(event.data);
+	// 		});
+	// 	}
+	// }
 </script>
 </html>

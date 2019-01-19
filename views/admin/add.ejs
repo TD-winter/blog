@@ -1,57 +1,95 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <title><%= title %></title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
-    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"> </script>
+    <link rel="stylesheet" href="/editormd/css/style.css" />
+    <link rel="stylesheet" href="/editormd/css/editormd.css" />
     <style type="text/css">
-        div{width:90%;margin:auto;max-width:1000px;}
-        input{width:200px;height:20px;margin:10px;}
-        textarea{width:500px;height:200px;margin:10px;}
-        label{margin:10px 10px 10px 0;display:inline-block;vertical-align:top;}
-        button{padding:5px 20px;margin:10px 10px 10px 58px;display:inline-block;vertical-align:top;}
+         .title_style{width:90%;margin:auto;}
+         .edit_input{width:200px;height:20px;margin:10px;}
+         .edit_textarea{width:500px;height:200px;margin:10px;}
+         .label_name{margin:10px 10px 10px 0;display:inline-block;vertical-align:top;}
+        #getContent{padding:5px 20px;margin:10px 10px 10px 58px;display:inline-block;vertical-align:top;}
     </style>
 </head>
 <body>
-<div>
-    <h3><%= title %></h3>
-    <label>标题：</label><input id="title" /><br />
-    <label>作者：</label><input id="writer" /><br />
-    <label>概要：</label><textarea id="brief" placeholder="简要概述"></textarea>
-    <script id="editor" type="text/plain" style="width:880px;height:600px;"></script>
-    <button id="getContent" onclick="getContent()">提交</button>
-</div>
-<script type="text/javascript" charset="utf-8" src="/javascripts/jquery-1.12.0.min.js"> </script>
-<script type="text/javascript">
+<div id="layout">
+    <div class="title_style">
+        <h3><%= title %></h3>
+        <label class="label_name">标题：</label><input class="edit_input" id="title" /><br />
+        <label class="label_name">作者：</label><input class="edit_input" id="writer" /><br />
+        <label class="label_name">概要：</label><textarea class="edit_textarea" id="brief" placeholder="简要概述"></textarea>
+        <button id="getContent">提交</button>
+    </div>
+    <div id="test-editormd">
+        <textarea style="display:none;">
+            [TOC]
 
-    //实例化编辑器
-    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    var ue = UE.getEditor('editor',{
-         autoHeight: false
-    });
-    function getContent(){
-        ue.ready(function() {
-            var html = ue.getContent();
-            console.log(html);
+            #### Disabled options
+
+            - TeX (Based on KaTeX);
+            - Emoji;
+            - Task lists;
+            - HTML tags decode;
+            - Flowchart and Sequence Diagram;
+
+            #### Editor.md directory
+
+                editor.md/
+                        lib/
+                        css/
+                        scss/
+                        tests/
+                        fonts/
+                        images/
+                        plugins/
+                        examples/
+                        languages/     
+                        editormd.js
+                        ...
+
+            ```html
+            &lt;!-- English --&gt;
+            &lt;script src="../dist/js/languages/en.js"&gt;&lt;/script&gt;
+
+            &lt;!-- 繁體中文 --&gt;
+            &lt;script src="../dist/js/languages/zh-tw.js"&gt;&lt;/script&gt;
+            ```
+        </textarea>
+    </div>
+</div>
+<script type="text/javascript" src="/javascripts/jquery-1.12.0.min.js"> </script>
+<script type="text/javascript" src="/editormd/js/editormd.min.js"></script>
+<script type="text/javascript">
+    var testEditor;
+    $(function() {
+        testEditor = editormd("test-editormd", {
+            width   : "90%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "/editormd/lib/",
+            // watch: true,
+            saveHTMLToTextarea: true
+        });
+
+        $('#getContent').click(function(){
+            // console.log(testEditor.getMarkdown());
+            // console.log(testEditor.getHTML());
+            // console.log(testEditor.getPreviewedHTML());
             var title = $('#title').val();
             var writer = $('#writer').val();
             var brief = $('#brief').val();
             $.post('/addArticle',{
                 title:title,
                 writer:writer,
-                article:html,
+                article:testEditor.getMarkdown(),
                 brief:brief
             },function(res){
                 console.log(res)
-                if(res.code == 200){
-                    location.reload();
-                }
-            })
-        });
-    }
+            });
+        })
+    });
 </script>
 </body>
 </html>
