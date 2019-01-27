@@ -55,6 +55,7 @@
             var brief = $('#brief').val();
             var classification = $('#classification').val();
             var right = $('#right').val();
+            console.log(testEditor.getMarkdown());
             $.post('/editArticle',{
                 _id:_id,
                 title:title,
