@@ -20,6 +20,7 @@ var articleSchema = new mongoose.Schema({
 	article:{type:String},
 	classification:{type:Number,default:1},
 	right:{type:Number,default:1},
+	isStatic:0,
 	time:{type:Date,default:Date.now}
 });
 var articleModel = con.model("article",articleSchema);
@@ -61,7 +62,7 @@ var upload = multer({storage: storage});
 /* GET home page. */
 
 router.get('/',function(req,res,next){
-	articleModel.find({"right":1,"classification":1},{title:1,writer:1,brief:1,time:1},{sort:{'time':-1}},function(err,doc){
+	articleModel.find({"right":1,"classification":1,"isStatic":1},{title:1,writer:1,brief:1,time:1},{sort:{'time':-1}},function(err,doc){
 		console.log(doc);
 		for(var i = 0;i < doc.length;i++){
 			doc[i].time_string = doc[i].time.getFullYear()+'-'+doc[i].time.getMonth()+'-'+doc[i].time.getDate();
@@ -105,10 +106,23 @@ router.get('/admin/edit',function(req,res,next){
 });
 
 router.get('/admin/list',function(req,res,next){
-	articleModel.find({},{title:1,writer:1},{sort:{'time':-1}},function(err,doc){
+	articleModel.find({},{title:1,writer:1,isStatic:1},{sort:{'time':-1}},function(err,doc){
 		res.render('admin/list',{title:'pageList',doc:doc});
 	})
 });
+router.get('/admin/producePage',function(req,res,next){
+	articleModel.find({_id:req.query.id},{title:1,writer:1,article:1,brief:1,classification:1,right:1,isStatic:1},function(err,doc){
+		res.render('page',{doc:doc},function(err,html){
+			fs.writeFile('./public/page/'+req.query.id+'.html',html,'utf8',function(err){
+				if(!err){
+					articleModel.update({_id:req.query.id},{isStatic:1},function(err,doc){
+						res.send({data:'successfully'});
+					})
+				}
+			})
+		})
+	})
+})
 router.get('/admin/delete',function(req,res,next){
 	console.log(req.query.id);
 	articleModel.remove({"_id":req.query.id},function(err){
