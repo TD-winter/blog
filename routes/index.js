@@ -1,5 +1,6 @@
 var express = require('express');
 var multer = require('multer');
+var marked = require('marked');
 var router = express.Router();
 var fs = require('fs');
 // var mysql = require('mysql');
@@ -112,7 +113,12 @@ router.get('/admin/list',function(req,res,next){
 });
 router.get('/admin/producePage',function(req,res,next){
 	articleModel.find({_id:req.query.id},{title:1,writer:1,article:1,brief:1,classification:1,right:1,isStatic:1},function(err,doc){
-		res.render('page',{doc:doc},function(err,html){
+		console.log(marked(doc[0].article));
+		doc[0].article = marked(doc[0].article);
+		res.render('page_template',{doc:doc},function(err,html){
+			// html = html.replace(/<script[^>]*>[^<]*?<\/script>/ig,'');
+			console.log(html);
+
 			fs.writeFile('./public/page/'+req.query.id+'.html',html,'utf8',function(err){
 				if(!err){
 					articleModel.update({_id:req.query.id},{isStatic:1},function(err,doc){
