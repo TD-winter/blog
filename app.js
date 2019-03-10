@@ -24,6 +24,15 @@ app.use(bodyParser.urlencoded({limit:'50mb',extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.all("*",function(req,res,next){
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "X-Requested-With",
+    "Access-Control-Allow-Methods":"PUT,POST,GET,DELETE,OPTIONS"
+  });
+  next();
+});
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/mobile', mobile);

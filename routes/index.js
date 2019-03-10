@@ -92,7 +92,7 @@ router.get('/oneBrief',function(req,res,next){
 });
 router.get('/oneBriefEdit',function(req,res,next){
 	res.render('oneBriefEdit',{title:'言语录入'})
-})
+});
 
 router.get('/admin/add',function(req,res,next){
 	res.render('admin/add',{title:'编辑文章'});
