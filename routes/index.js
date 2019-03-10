@@ -161,6 +161,25 @@ router.get('/page',function(req,res,next){
 	})
 })
 
+// 生成静态文件
+router.get('/admin/page',function(req,res,next){
+	articleModel.find({"_id":req.query.id},function(err,doc){
+		// console.log(doc);
+		res.render('page',{doc:doc},function(err,html){
+			console.log(html);
+			fs.writeFile('public/page/'+req.query.id+'.html',html,'utf8',function(err){
+				if(err){
+
+				}else{
+					console.log('successfully');
+					res.render('successfully');
+				}
+			})
+		});
+	})
+})
+
+
 // router.get('/dong',function(req,res,next){
 // 	pool.getConnection(function(err,connection){
 // 		connection.query("select foot,hostid,color,count(*) as number from pigeon group by foot",function(err,result){
@@ -178,10 +197,11 @@ router.get('/page',function(req,res,next){
 // 	});
 // });
 router.post('/face/info',upload.single('pic'),function(req,res,next){
+	console.log(req);
     var file = req.file;
     console.log(file);
 	faceInfo(res,file.path);
-})
+});
 
 router.get('/dddd',function(req,res,next){
 	var data = 'Hello,guliang,I xihuan ni!';
