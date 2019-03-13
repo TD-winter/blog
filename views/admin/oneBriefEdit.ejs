@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="styleSheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <div class="one_brief_edit">
+        <h3><%= title %></h3>
+        <label>言语：</label><textarea id="brief" placeholder="简要概述"><%= doc[0].word %></textarea><br />
+        <label>出处：</label><input id="source" value="<%= doc[0].source %>" /><br />
+        <input id="id" type="hidden" value="<%= doc[0]._id %>" />
+        <button id="getContent" onclick="getContent()">提交</button>
+    </div>
+
+<script type="text/javascript" src="/javascripts/jquery-1.12.0.min.js"> </script>
+<script type="text/javascript">
+    function getContent(){
+        var source = $('#source').val();
+        var word = $('#brief').val();
+        var _id = $('#id').val();
+        $.post('/updateOneBrief',{
+            _id:_id,
+            word:word,
+            source:source
+        },function(res){
+            console.log(res);
+            if(res.code == 200){
+                $('#brief').val('读书之法，在循序渐进，熟读而精思。　——朱煮');
+                $('#source').val('');
+            }else{
+                $('#brief').val(word + '上传失败!!!');
+            }
+        })
+    }
+</script>
+</body>
+</html>

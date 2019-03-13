@@ -19,6 +19,8 @@
         <h3><%= title %></h3>
         <label class="label_name">标题：</label><input class="edit_input" id="title" /><br />
         <label class="label_name">作者：</label><input class="edit_input" id="writer" /><br />
+        <label class="label_name">类别：</label><input id="classification" class="edit_input" placeholder="1:技术，2:诗墨" /><br />
+        <label class="label_name">权限：</label><input id="right" class="edit_input" placeholder="0:不显示，1:显示" /><br />
         <label class="label_name">概要：</label><textarea class="edit_textarea" id="brief" placeholder="简要概述"></textarea>
         <button id="getContent">提交</button>
     </div>
@@ -70,7 +72,11 @@
             syncScrolling : "single",
             path    : "/editormd/lib/",
             // watch: true,
-            saveHTMLToTextarea: true
+            saveHTMLToTextarea: true,
+
+            imageUpload:true,
+            imageFormats:["jpg","jpeg","git","png","bmp","webp"],
+            imageUploadURL:"/face/info"
         });
 
         $('#getContent').click(function(){
@@ -80,11 +86,15 @@
             var title = $('#title').val();
             var writer = $('#writer').val();
             var brief = $('#brief').val();
+            var classification = $('#classification').val();
+            var right = $('#right').val();
             $.post('/addArticle',{
                 title:title,
                 writer:writer,
                 article:testEditor.getMarkdown(),
-                brief:brief
+                brief:brief,
+                classification:classification,
+                right:right
             },function(res){
                 console.log(res)
             });

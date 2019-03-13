@@ -67,7 +67,7 @@ router.get('/story/rank',function(req,res,next){
 		{_id:1,start:1,storyContent:1,person:1,time:1},{sort:{start:-1},skip:1},function(err,doc){
 			res.json(doc);
 		})
-})
+});
 
 // 点赞
 router.get('/story/star',function(req,res,next){
@@ -78,8 +78,7 @@ router.get('/story/star',function(req,res,next){
 				res.json({code:200,msg:'success'});
 			}
 		})
-})
-
+});
 
 // 提交数据
 router.post('/story/detail',function(req,res,next){
@@ -91,7 +90,6 @@ router.post('/story/detail',function(req,res,next){
 
 	// 	}
 	// })
-	
 	console.log(JSON.parse(req.body.data));
 	theStoryModel.insertMany(JSON.parse(req.body.data),function(err,doc){
 		if(err){
@@ -100,6 +98,13 @@ router.post('/story/detail',function(req,res,next){
 			res.send({code:200,msg:'successfully'});
 		}
 	})
-})
+});
+
+router.get('/storyList',function(req,res,next){
+	theStoryModel.find({'fatherId':1},{_id:1,storyId:1,storyContent:1,person:1,time:1},{},function(err,doc){
+		console.log(doc);
+		res.render('mobile/answerTheStoryList',{doc:doc})
+	})
+});
 
 module.exports = router;
