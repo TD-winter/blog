@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>admin-list</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<style>
+	a{text-decoration:none;color:#333;}
+	ul{width:60%;display:inline-block;}
+	li{list-style:none;width:90%;padding:10px;margin:0 0 20px;box-shadow:0 0 10px #666;}
+	li h3{margin:0 auto 10px;}
+	li p{margin:5px auto;}
+	.chat_box{width:25%;display:inline-block;vertical-align:top;}
+	.message_box{width:100%;height:500px;box-shadow:0 0 5px #ccc;overflow:scroll;}
+	.message_send{width:80%;height:30px;}
+	.message_submit{width:15%;height:36px;}
+	.edit_page,.produce_page,.delete_page{border: 1px solid #999;padding: 4px 8px;font-size: 13px;border-radius: 4px;background: #FFF;}
+	.produce_page:hover,.delete_page:hover{cursor:pointer;}
+</style>
+</head>
+<body>
+	<ul>
+		<% for(var i in doc){ %>
+			<li>
+					<h3><%= doc[i].storyContent %></h3>
+					<p><%= doc[i].person %></p>
+<!-- 				<a class="edit_page" href="/admin/edit?id=<%= doc[i]._id %>">编辑</a>
+				<button class="produce_page" value="<%= doc[i]._id %>">生成</button> -->
+				<button class="delete_page" value="<%= doc[i]._id %>">删除</button>
+			</li>
+		<% } %>
+	</ul>
+</body>
+<script src="/javascripts/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+	$('.delete_page').click(function(){
+		var _id = $(this).val();
+		$.get('/mobile/story/deleteStory?id='+_id,function(res){
+			console.log(res);
+			if(res.code == 200){
+				location.reload();
+			}
+		})
+	});
+	$('.produce_page').click(function(){
+		var _id = $(this).val();
+		$.get('/admin/producePage?id='+_id,function(res){
+			console.log(res);
+		})
+	})
+</script>
+</html>

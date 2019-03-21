@@ -176,8 +176,14 @@ router.get('/admin/delete',function(req,res,next){
 		if(err){
 			console.log(err);
 		}else{
-			console.log('delete is successed!!!');
-			res.send({code:200,msg:'delete successfully'});
+			fs.unlink('./public/page/'+req.query.id+'.html',function(err){
+				if(err){
+					console.log(err);
+				}else{
+					console.log('delete is successed!!!');
+					res.send({code:200,msg:'delete successfully'});
+				}
+			})
 		}
 	})
 });
