@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/dong',{ useNewUrlParser: true },function(err,res){
+mongoose.connect('mongodb://root:Winter123@localhost:27017/dong',{ useNewUrlParser: true },function(err,res){
 	if(err){
 		console.log(err);
 	}
