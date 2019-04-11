@@ -23,8 +23,7 @@ let EamilAuth = {
 let EmailFrom = '"vince" <747386743@qq.com>';
 
 //接收者邮箱地
-// let EmailTo = "747386743@qq.com,839791982@qq.com,729510649@qq.com";
-let EmailTo = "747386743@qq.com";
+let EmailTo = "747386743@qq.com,839791982@qq.com";
 //邮件主题
 let EmailSubject = "一封暖暖的小邮件,要减肥了呢！！！";
 
