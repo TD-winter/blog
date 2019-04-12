@@ -20,15 +20,15 @@ let EamilAuth = {
   pass: "oxyuqypblffubdcd"
 };
 //发送者昵称与邮箱地址
-let EmailFrom = '"vince" <747386743@qq.com>';
+let EmailFrom = '"TD-winter" <747386743@qq.com>';
 
 //接收者邮箱地
 let EmailTo = "747386743@qq.com,839791982@qq.com";
 //邮件主题
-let EmailSubject = "一封暖暖的小邮件,要减肥了呢！！！";
+let EmailSubject = "今天的问候：早安！！！";
 
 //每日发送时间
-let EmailHour = 5;
+let EmailHour = 6;
 let EmialMinminute= 20;
 
 // 爬取数据的url
