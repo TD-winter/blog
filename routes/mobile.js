@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/dong',{ useNewUrlParser: true },function(err,res){
+mongoose.connect('mongodb://root:Winter123@localhost:27017/dong',{ useNewUrlParser: true },function(err,res){
 	if(err){
 		console.log(err);
 	}
@@ -101,10 +101,26 @@ router.post('/story/detail',function(req,res,next){
 });
 
 router.get('/storyList',function(req,res,next){
-	theStoryModel.find({'fatherId':1},{_id:1,storyId:1,storyContent:1,person:1,time:1},{},function(err,doc){
+	theStoryModel.find({'fatherId':0},{_id:1,storyId:1,storyContent:1,person:1,time:1},{},function(err,doc){
 		console.log(doc);
 		res.render('mobile/answerTheStoryList',{doc:doc})
 	})
 });
 
+router.get('/storyAllList',function(req,res,next){
+	theStoryModel.find({},{_id:1,storyId:1,storyContent:1,person:1,time:1},{},function(err,doc){
+		res.render('mobile/answerTheStoryAllList',{doc:doc});
+	})
+});
+
+router.get('/story/deleteStory',function(req,res,next){
+	theStoryModel.remove({"_id":req.query.id},function(err){
+		if(err){
+			console.log(err);
+		}else{
+			console.log('delete is successed!!!');
+			res.send({code:200,msg:'delete successfully'});
+		}
+	})
+})
 module.exports = router;

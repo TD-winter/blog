@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 // var faceInfo = require('../util/face.js');
 var faceInfo = require('../util/qq_face.js');
 
-mongoose.connect('mongodb://localhost:27017/dong',{ useNewUrlParser: true });
+mongoose.connect('mongodb://root:Winter123@localhost:27017/dong',{ useNewUrlParser: true });
 
 const con = mongoose.connection;
 
@@ -47,14 +47,14 @@ var createFolder = function(folder){
 		fs.mkdirSync(folder);
 	}
 };
-var uploadFolder = './uploads';
+var uploadFolder = './public/uploads';
 createFolder(uploadFolder);
 var storage = multer.diskStorage({
 	destination:function(req,file,cb){
 		cb(null,uploadFolder);
 	},
 	filename:function(req,file,cb){
-		cb(null,file.fieldname + '_' + Date.now()+'.png');
+		cb(null,file.fieldname + '_' + Date.now()+'.jpg');
 	}
 });
 var upload = multer({storage: storage});
@@ -176,8 +176,14 @@ router.get('/admin/delete',function(req,res,next){
 		if(err){
 			console.log(err);
 		}else{
-			console.log('delete is successed!!!');
-			res.send({code:200,msg:'delete successfully'});
+			fs.unlink('./public/page/'+req.query.id+'.html',function(err){
+				if(err){
+					console.log(err);
+				}else{
+					console.log('delete is successed!!!');
+					res.send({code:200,msg:'delete successfully'});
+				}
+			})
 		}
 	})
 });
@@ -253,6 +259,11 @@ router.post('/face/info',upload.single('pic'),function(req,res,next){
     var file = req.file;
     console.log(file);
 	faceInfo(res,file.path);
+});
+
+router.post('/mdEditor/pic',upload.single('editormd-image-file'),function(req,res,next){
+	var file = req.file;
+	res.json({url:file.path.replace('public','').replace(/\\/g,'/'),success:1,message:'upload success!'});
 });
 
 router.get('/dddd',function(req,res,next){
