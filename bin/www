@@ -13,7 +13,7 @@ var fs = require('fs');
 var io = require('socket.io');
 var doneThisFn = require('../util/email');
 var privateKey  = fs.readFileSync('./key/2772788_why-dong.com.key', 'utf8');
-var certificate = fs.readFileSync('./key/2772788_why-dong.com.pem','utf8');
+var certificate = fs.readFileSync('./key/2772788_why-dong.com.crt','utf8');
 var credentials = {key:privateKey,cert:certificate};
 /**
  * Get port from environment and store in Express.
