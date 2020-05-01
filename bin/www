@@ -11,7 +11,7 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var io = require('socket.io');
-var doneThisFn = require('../util/email');
+
 var privateKey  = fs.readFileSync('./key/1529819111363.key', 'utf8');
 var certificate = fs.readFileSync('./key/1529819111363.crt','utf8');
 var credentials = {key:privateKey,cert:certificate};
@@ -37,7 +37,6 @@ if(cluster.isMaster){
   for(let i = 0;i < numCPUs;i++){
     cluster.fork();
   }
-  doneThisFn();
   cluster.on('exit',(worker,code,signal) => {
     console.log(`worker ${worker.process.pid} died`);
   });
