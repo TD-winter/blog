@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>生命游戏</title>
+    <!-- <script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script> -->
+    <!-- <script src="https://cdn.bootcss.com/three.js/100/three.min.js"></script> -->
+    <style type="text/css">
+      .btn_box {
+        padding: 10px;
+      }
+      .btn_box button {
+        width: 70px;
+        height: 30px;
+        margin-right: 20px;
+        background: #FFF;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color:#333;
+        outline: none;
+      }
+      .btn_box button:active {
+        background: #24daeb;
+        color: #fff;
+        border: none;
+      }
+    </style>
+  </head>
+    <div class="btn_box">
+      <button id="start">开始</button>
+      <button id="stop">停止</button>
+      <button id="fresh">重置</button>
+      <span style="margin-left: 40px;color: #666;">(tips：点击方格，选择自己最初始图案；然后点击开始，观察变化。)</span>
+    </div>
+    <canvas id="gameOfLive" width="1200" height="700"></canvas>
+  <body>
+
+  </body>
+  <script>
+    var _canvas = document.getElementById('gameOfLive');
+    var _canvasContent = _canvas.getContext('2d');
+    var _cols = 120,
+      _rows = 70,
+      _canvasWidth = _canvas.width,
+      _canvasHeight = _canvas.height,
+      _unitWidth = _canvasWidth / _cols,
+      _unitHeight = _canvasHeight / _rows;
+
+    var cellsArr = [];
+
+    var timePlay = null;
+
+    initStage( _cols, _rows, _canvasWidth, _canvasHeight );
+    initCells( _cols, _rows );
+
+    function initStage () {
+      _canvasContent.strokeStyle = 'rgba( 0, 51, 51, 0.8 )';
+      _canvasContent.lineWidth = 0.1;
+
+      _canvasContent.beginPath();
+      for ( var i = 0; i <= _cols; i++ ) {
+        _canvasContent.moveTo( i * _unitWidth, 0);
+        _canvasContent.lineTo( i * _unitWidth, _canvasHeight);
+      }
+
+      for( var j = 0; j <= _rows; j++ ) {
+        _canvasContent.moveTo( 0, j * _unitHeight);
+        _canvasContent.lineTo( _canvasWidth, j * _unitHeight);
+      }
+      
+      _canvasContent.stroke();
+      _canvasContent.closePath();
+    }
+
+    function initCells ( cols, rows ) {
+      for ( let i = 0; i < cols; i++ ) {
+        cellsArr.push([]);
+        for( let j = 0; j < rows; j++ ) {
+          cellsArr[i].push( false );
+        }
+      }
+    }
+
+    function checkThisCellStatus ( x, y, temArr ) {
+      let tempNumber = 0;
+      for ( let i = -1; i <= 1; i++ ) {
+        for ( let j = -1; j <= 1; j++ ) {
+          if ( i == 0 && j == 0 ) {
+            continue ;
+          } else {
+            if ( x + i >= 0 && x + i < _cols && y + j >= 0 && y + j < _rows ) {
+              if( temArr[x+i][y+j] ) {
+                tempNumber++;
+              }
+            }
+          }
+        }
+      }
+
+      if ( tempNumber > 3 || tempNumber < 2 ) {
+        return false;
+      } else if ( tempNumber == 3 ) {
+        return true;
+      } else {
+        return temArr[x][y];
+      }
+
+    }
+
+    function freshCanvas () {
+      let temArr = [];
+      for (let i = 0; i < _cols; i++ ) {
+        let [...arr] = cellsArr[i];
+        temArr.push(arr);
+      }
+      for ( let i = 0; i < _cols; i++ ) {
+        for ( let j = 0; j < _rows; j++ ) {
+          if ( checkThisCellStatus( i, j, temArr ) ) {
+            drawThisCell( i, j );
+          }  else {
+            clearThisCell( i, j );
+          }
+        }
+      }
+    }
+
+    function drawThisCell ( x, y ) {
+      _canvasContent.fillStyle = '#FF0000';
+      _canvasContent.fillRect( x * _unitWidth + 0.1, y * _unitHeight + 0.1, _unitWidth - 0.2, _unitHeight - 0.2 );
+      _canvasContent.strokeRect( x * _unitWidth + 0.1, y * _unitHeight + 0.1, _unitWidth - 0.2, _unitHeight - 0.2 )
+      cellsArr[x][y] = true;
+    }
+
+    function clearThisCell ( x, y ) {
+      _canvasContent.fillStyle = '#FFFFFF';
+      _canvasContent.fillRect( x * _unitWidth + 0.1, y * _unitHeight + 0.1, _unitWidth - 0.2, _unitHeight - 0.2 );
+      _canvasContent.strokeRect( x * _unitWidth + 0.1, y * _unitHeight + 0.1, _unitWidth - 0.2, _unitHeight - 0.2 )
+      cellsArr[x][y] = false;
+    }
+
+    document.getElementById('start').onclick = function () {
+      timePlay = setInterval( () => {
+        freshCanvas();
+      }, 100 )
+    }
+
+    document.getElementById('stop').onclick = function () {
+      clearInterval(timePlay)
+    }
+
+    document.getElementById('fresh').onclick = function () {
+      location.reload();
+    }
+    _canvas.onmousedown = function ( e ) {
+      var canvasY = e.pageY - _canvas.offsetTop;
+      var canvasX = e.pageX - _canvas.offsetLeft;
+      var martexX = Math.floor( canvasX / _unitWidth );
+      var martexY = Math.floor( canvasY / _unitHeight );
+      if ( cellsArr[martexX][martexY] ) {
+        clearThisCell( martexX, martexY );
+      } else {
+        drawThisCell( martexX, martexY );
+      }
+    }
+
+    // _canvas.onmousemove = function ( e ) {
+    //   console.log(e);
+    //   _canvasContent.strokeStyle = 'rgba(255, 100, 100, 0.8)';
+    //   _canvasContent.lineWIdth = 5;
+    //   _canvasContent.beginPath();
+    //   _canvasContent.moveTo( 0, e.pageY - _canvas.offsetTop );
+    //   _canvasContent.lineTo( _canvasWidth, e.pageY - _canvas.offsetTop );
+    //   _canvasContent.moveTo( e.pageX - _canvas.offsetLeft, 0 );
+    //   _canvasContent.lineTo( e.pageX - _canvas.offsetLeft, _canvasHeight );
+    //   _canvasContent.stroke();
+    //   _canvasContent.closePath();
+    // }
+
+  </script>
+</html>
