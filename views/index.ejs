@@ -32,9 +32,9 @@
 	</div>
 
 	<div class="chat_box">
-<!-- 		<div class="message_box"></div>
+		<div class="message_box"></div>
 		<input class="message_send" />
-		<button class="message_submit">发送</button> -->
+		<button class="message_submit">发送</button>
 		<div style="padding:10px;">
 			<h4 id="beauty">你的颜值：</h4>
 			<input name="pic" type="file" id="imgFile" />
@@ -42,7 +42,7 @@
 	</div> 
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
-<!-- <script src="/javascripts/socket.io.js"></script> -->
+<script src="/javascripts/socket.io.js"></script>
 <script type="text/javascript">
 	$('#imgFile').on('change',function(){
 		var formData = new FormData();
@@ -76,7 +76,6 @@
 			$('.message_submit').trigger("click");
 		}
 	});
-pwa
 	if(navigator.serviceWorker != null){
 		var sw = navigator.serviceWorker;
 		navigator.serviceWorker.register('/sw.js',{scope:"/"}).then(function(registration){
