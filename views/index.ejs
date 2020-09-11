@@ -31,7 +31,8 @@
 		</ul>
 	</div>
 
-	<div class="chat_box">
+
+<!-- 	<div class="chat_box">
 		<div class="message_box"></div>
 		<input class="message_send" />
 		<button class="message_submit">发送</button>
@@ -39,11 +40,13 @@
 			<h4 id="beauty">你的颜值：</h4>
 			<input name="pic" type="file" id="imgFile" />
 		</div>
-	</div> 
+	</div>  -->
+	<p style="text-align:center;"> <a href="http://beian.miit.gov.cn ">鄂ICP备17010028号</a></p>
 </body>
 <script src="/javascripts/jquery-1.12.0.min.js"></script>
 <script src="/javascripts/socket.io.js"></script>
 <script type="text/javascript">
+
 	$('#imgFile').on('change',function(){
 		var formData = new FormData();
 		var file = $(this)[0].files[0];
@@ -81,14 +84,54 @@
 		navigator.serviceWorker.register('/sw.js',{scope:"/"}).then(function(registration){
 			window.registration = registration;
 		});
+=======
+	// $('#imgFile').on('change',function(){
+	// 	var formData = new FormData();
+	// 	var file = $(this)[0].files[0];
+	// 	formData.append('pic',file);
+	// 	$.ajax({
+	// 		type:'POST',
+	// 		url:'/face/info',
+	// 		data:formData,
+	// 		processData:false,
+	// 		contentType:false,
+	// 		success:function(res){
+	// 			res = JSON.parse(res);
+	// 			console.log(res);
+	// 			$('#beauty').text("你的颜值："+res.data.face_list[0].beauty);
+	// 		}
+	// 	})
+	// })
+	// var socket = io();
+	// socket.on('getMsg',function(data){
+	// 	console.log(data);
+	// 	var msg_dom = $("<p>"+data.msg+"</p>")
+	// 	$('.message_box').append(msg_dom);
+	// });
+	// $('.message_submit').click(function(){
+	// 	socket.emit('sendData',{msg:$('.message_send').val()});
+	// 	$('.message_send').val('');
+	// });
+	// $(document).keyup(function(event){
+	// 	if(event.keyCode == 13){
+	// 		$('.message_submit').trigger("click");
+	// 	}
+	// });
+// pwa
+	// if(navigator.serviceWorker != null){
+	// 	var sw = navigator.serviceWorker;
+	// 	navigator.serviceWorker.register('/sw.js',{scope:"/"}).then(function(registration){
+	// 		window.registration = registration;
+	// 	});
+>>>>>>> 63afa0a5205492efa119c4857fdfeab086b3a5e1
 
-		if(sw.controller){
-			sw.controller.postMessage('SW!!!');
+	// 	if(sw.controller){
+	// 		sw.controller.postMessage('SW!!!');
 
-			sw.addEventListener('message',event => {
-				console.log(event.data);
-			});
-		}
-	}
+	// 		sw.addEventListener('message',event => {
+	// 			console.log(event.data);
+	// 		});
+	// 	}
+	// }
 </script>
 </html>
